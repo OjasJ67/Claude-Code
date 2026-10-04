@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="t">
-  <title id="t">Placeholder: replace with your own plant photo</title>
-  <rect width="400" height="300" fill="#E7ECEB"/>
-  <rect x="12" y="12" width="376" height="276" fill="none" stroke="#D9D4C7" stroke-width="1.5" stroke-dasharray="6 6"/>
-  <g fill="none" stroke="#4A3B2A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"><path d="M200 205v-55M200 170c-22-4-34-20-32-42c22 2 34 18 32 42zM200 160c20-6 30-22 26-42c-20 4-30 20-26 42z"/><path d="M150 205h100v35a10 10 0 0 1-10 10h-80a10 10 0 0 1-10-10z"/></g>
-  <text x="200" y="64" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#4A3B2A">TODO: replace with your own photo</text>
-</svg>

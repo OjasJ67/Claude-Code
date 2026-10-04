@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="t">
-  <title id="t">Placeholder: replace with your own cleanup crew photo</title>
-  <rect width="400" height="300" fill="#E7ECEB"/>
-  <rect x="12" y="12" width="376" height="276" fill="none" stroke="#D9D4C7" stroke-width="1.5" stroke-dasharray="6 6"/>
-  <g fill="none" stroke="#4A3B2A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"><g transform="translate(200 175)"><path d="M-46 0c0-26 20-40 46-40s46 14 46 40"/><path d="M-36-22q36 14 72 0M-44-8q44 14 88 0M-46 0h92"/><path d="M-30-38l-14-14M30-38l14-14"/></g></g>
-  <text x="200" y="64" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#4A3B2A">TODO: replace with your own photo</text>
-</svg>

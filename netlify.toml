@@ -1,0 +1,4 @@
+# Netlify settings. The site itself needs no build step.
+[build]
+  publish = "."
+  functions = "netlify/functions"

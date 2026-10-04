@@ -40,7 +40,7 @@
   function fillContact() {
     if (!hasConfig) return;
     $$('[data-contact="email"]').forEach(function (a) { a.href = "mailto:" + EMAIL; a.textContent = EMAIL; });
-    $$('[data-contact="phone"]').forEach(function (a) { a.href = "tel:" + PHONE; a.textContent = PHONE; });
+    $$('[data-contact="phone"]').forEach(function (a) { a.href = "tel:" + PHONE; a.textContent = typeof PHONE_DISPLAY !== "undefined" ? PHONE_DISPLAY : PHONE; });
     var ig = $('[data-contact="instagram"]');
     var igItem = $('[data-contact="instagram-item"]');
     if (ig && igItem && INSTAGRAM) {
@@ -220,7 +220,8 @@
     businessName: "",
     town: "",
     month: "",
-    edited: false // true once the visitor types in the message box
+    edited: false, // true once the visitor types in the message box
+    subject: ""    // custom email subject (planner kits, chat questions)
   };
 
   function fillProductSelect() {
@@ -265,7 +266,7 @@
 
   function updateSendLinks() {
     var p = productById(state.productId);
-    var subject = "Inquiry: " + (p ? p.name : "General question");
+    var subject = state.subject || "Inquiry: " + (p ? p.name : "General question");
     var body = els.message.value;
     if (hasConfig) {
       els.email.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
@@ -309,7 +310,7 @@
     // Summary chip
     if (p) {
       els.chipText.textContent = p.name + " · " + money(priceFor(p, state.delivery));
-      els.chipChange.href = "#" + p.line;
+      els.chipChange.href = p.line === "crews" ? "#crew-products" : "#plant-products";
       els.chip.hidden = false;
     } else {
       els.chip.hidden = true;
@@ -332,6 +333,7 @@
     opts = opts || {};
     var p = productById(id);
     state.productId = p ? p.id : "";
+    state.subject = "";
     if (p && state.qty < minQty(p)) state.qty = minQty(p);
     if (p && !canShip(p)) state.delivery = "pickup";
     render({ force: opts.force });
@@ -344,6 +346,20 @@
     // Move keyboard focus without a second jump.
     els.heading.focus({ preventScroll: true });
   }
+
+  // Prefill the form with a ready-made message (used by the setup planner and the chat).
+  function inquireWith(subject, message) {
+    state.productId = "";
+    render({ force: true });
+    state.subject = subject;
+    state.edited = true;
+    els.message.value = message;
+    els.regenerate.hidden = false;
+    updateSendLinks();
+    setUrl("");
+    goToContact();
+  }
+  window.AgarOak = { inquireWith: inquireWith };
 
   /* ---------- Events ---------- */
   document.addEventListener("click", function (e) {
@@ -396,6 +412,7 @@
   });
 
   els.regenerate.addEventListener("click", function () {
+    state.subject = "";
     render({ force: true });
     els.message.focus();
   });

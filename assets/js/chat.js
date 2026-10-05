@@ -5,6 +5,7 @@
    2. the AI endpoint in config.js (CHAT_ENDPOINT), if set;
    3. instant answers from assistant.js, which work anywhere with no network.
    If an AI answer fails, the visitor still gets the instant answer.
+   main.js loads this file (and assistant.js) the first time someone opens the chat.
    ========================================================================== */
 (function () {
   "use strict";
@@ -37,7 +38,8 @@
     products: typeof PRODUCTS !== "undefined" ? PRODUCTS : [],
     flags: typeof FLAGS !== "undefined" ? FLAGS : { njNurseryCertified: false, usdaPPQ526Permit: false },
     email: typeof EMAIL !== "undefined" ? EMAIL : "",
-    phoneDisplay: typeof PHONE_DISPLAY !== "undefined" ? PHONE_DISPLAY : (typeof PHONE !== "undefined" ? PHONE : "")
+    phoneDisplay: typeof PHONE_DISPLAY !== "undefined" ? PHONE_DISPLAY : (typeof PHONE !== "undefined" ? PHONE : ""),
+    differences: typeof DIFFERENCES !== "undefined" ? DIFFERENCES : null
   };
 
   var turns = [];          // the conversation sent to the AI: [{role, content}]
@@ -130,7 +132,9 @@
 
     Promise.resolve()
       .then(function () {
-        return b.ask(history, ASSISTANT.buildPrompt(ctx), function (partial) {
+        // The AI briefing is only needed where the page talks to the AI itself (the preview).
+        var prompt = typeof ASSISTANT_PROMPT !== "undefined" ? ASSISTANT_PROMPT.build(ASSISTANT, ctx) : "";
+        return b.ask(history, prompt, function (partial) {
           bubble.classList.remove("msg-wait");
           bubble.textContent = cleanText(partial);
         });
@@ -202,4 +206,5 @@
 
   setModeLabel();
   root.hidden = false;
+  window.AgarChat = { open: open };
 })();

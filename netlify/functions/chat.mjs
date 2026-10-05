@@ -8,21 +8,26 @@ import Anthropic from "@anthropic-ai/sdk";
 import configFile from "../../assets/js/config.js";
 import productsFile from "../../assets/js/products.js";
 import assistantFile from "../../assets/js/assistant.js";
+import differencesFile from "../../assets/js/differences.js";
+import promptFile from "../../assets/js/assistant-prompt.js";
 
 const { EMAIL, PHONE_DISPLAY, FLAGS } = configFile;
 const { PRODUCTS } = productsFile;
 const { ASSISTANT } = assistantFile;
+const { DIFFERENCES } = differencesFile;
+const { ASSISTANT_PROMPT } = promptFile;
 
 const MODEL = "claude-opus-5-5";
 const MAX_TURNS = 10;          // most recent messages kept from the conversation
 const MAX_USER_CHARS = 600;    // longest visitor message accepted
 const MAX_REPLY_CHARS = 2000;  // longest earlier assistant reply passed back
 
-const SYSTEM_PROMPT = ASSISTANT.buildPrompt({
+const SYSTEM_PROMPT = ASSISTANT_PROMPT.build(ASSISTANT, {
   products: PRODUCTS,
   flags: FLAGS,
   email: EMAIL,
-  phoneDisplay: PHONE_DISPLAY
+  phoneDisplay: PHONE_DISPLAY,
+  differences: DIFFERENCES
 });
 
 let client; // created on first use; reads ANTHROPIC_API_KEY

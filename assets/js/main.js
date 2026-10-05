@@ -441,6 +441,44 @@
 
   form.addEventListener("submit", function (e) { e.preventDefault(); });
 
+  /* ---------- Chat assistant: loaded the first time someone opens it ---------- */
+  var chatRoot = $("#chat");
+  var chatLoading = null;
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var tag = document.createElement("script");
+      tag.src = src;
+      tag.onload = resolve;
+      tag.onerror = reject;
+      document.body.appendChild(tag);
+    });
+  }
+  function loadChat() {
+    if (!chatLoading) {
+      // Skip whatever already loaded, so a retry never runs a file twice.
+      chatLoading = (typeof ASSISTANT === "undefined" ? loadScript("assets/js/assistant.js") : Promise.resolve())
+        .then(function () { return window.AgarChat ? null : loadScript("assets/js/chat.js"); });
+    }
+    return chatLoading;
+  }
+  if (chatRoot) {
+    chatRoot.hidden = false;
+    document.addEventListener("click", function (e) {
+      if (window.AgarChat) return; // chat.js handles clicks once it has loaded
+      var trigger = e.target.closest("#chat-launcher, [data-open-chat]");
+      if (!trigger) return;
+      e.preventDefault();
+      trigger.setAttribute("aria-busy", "true");
+      loadChat().then(function () {
+        trigger.removeAttribute("aria-busy");
+        if (window.AgarChat) window.AgarChat.open(trigger.getAttribute("data-chat-prompt") || "");
+      }, function () {
+        trigger.removeAttribute("aria-busy");
+        chatLoading = null; // let the next click try again
+      });
+    });
+  }
+
   /* ---------- Boot ---------- */
   fillContact();
   renderReferences();

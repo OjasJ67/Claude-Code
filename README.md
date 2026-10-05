@@ -16,7 +16,9 @@ Plain HTML, CSS and JavaScript. No build step, no cookies, no analytics, and no 
 | `assets/js/products.js` | Every product card: name, one-line purpose, prices, status |
 | `assets/js/stats.js` | The big statistics and where each one appears |
 | `assets/js/references.js` | The numbered reference list (stats and biology claims link here) |
-| `assets/js/assistant.js` | What the chat assistant knows: its instant answers and the AI's briefing |
+| `assets/js/differences.js` | "What makes us different": every line on the two sample labels, what it means, and the subscription and display-jar offers |
+| `assets/js/assistant.js` | The chat assistant's instant answers |
+| `assets/js/assistant-prompt.js` | The briefing the AI gets (only used when AI answers are on) |
 | `assets/js/planner.js` | The setup planner: which products it suggests for each setup and size |
 
 ### Legal flags (`config.js`)
@@ -44,13 +46,16 @@ The "Ask a question" button opens a chat that answers general questions.
   2. In Netlify, go to Site configuration → Environment variables and add `ANTHROPIC_API_KEY` with a key from console.anthropic.com.
   3. In `assets/js/config.js`, set `CHAT_ENDPOINT = "/api/chat"` and redeploy.
 
-  The AI is briefed from the same files as the website (products, prices, flags, FAQ), so it stays in sync. If the AI is ever unavailable, visitors still get the instant answer.
+  The AI is briefed from the same files as the website (products, prices, flags, selling points, FAQ), so it stays in sync. If the AI is ever unavailable, visitors still get the instant answer.
+  The chat's code only downloads the first time someone opens the chat, so it doesn't slow the page down.
   The endpoint is public, so set a monthly spend limit in the Anthropic Console.
 
 ## TODO before launch
 
 - [ ] `assets/js/config.js`: add `INSTAGRAM` if you have one.
-- [ ] Photos: every black "?" box is a placeholder. Product photos: set each product's `image` in `products.js`. The two "What we make" photos: change the `src` of the two `img-slot` images in `index.html`.
+- [ ] Logo: replace `assets/img/logo.svg` (header, footer and the sample labels) and `assets/img/favicon.svg` (browser tab) with your own. Any shape works; it's shown at a fixed height.
+- [ ] Photos: every dark-brown "?" box is a placeholder. Product photos: set each product's `image` in `products.js`. The two "What we make" photos: change the `src` of the two `img-slot` images in `index.html`.
+- [ ] Check the promises in `differences.js` before launch, especially the two guarantees (30 days on rooted starter plants; replacing a starter culture that crashes in its first month), the springtail subscription and display jars, and the QR care-video card.
 - [ ] Optional: switch on AI chat answers (see "Chat assistant" above).
 - [ ] `index.html`, About section: replace "TODO: 2–3 sentences about you and why you started this."
 - [ ] `privacy.html`: fill in the "Last updated" date.
@@ -59,6 +64,7 @@ The "Ask a question" button opens a chat that answers general questions.
 
 - Never call a product a fertilizer, plant food, soil amendment or soil improver.
 - No medical or health claims about any plant.
-- No guarantees: say "helps control mold" and "grown in sterile culture".
+- No product-effect guarantees: say "helps control mold" and "grown in sterile culture". The only guarantees on the site are the two replacement guarantees in `differences.js`.
+- Say "USDA-allowed species", never "USDA-approved".
 - Species names only; no patented or trademarked cultivar names.
 - Cleanup crews: only species USDA allows without a containment facility (never Cubaris, Nesodillo or Merulanella).

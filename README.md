@@ -6,7 +6,7 @@ Plain HTML, CSS and JavaScript. No build step, no cookies, no analytics, and no 
 ## Run it
 
 - **On your computer:** double-click `index.html`.
-- **Deploy:** upload the whole folder as-is to Netlify, Cloudflare Pages or GitHub Pages.
+- **Deploy:** connect this GitHub repository to Netlify; every push then goes live. (Other static hosts work too, but Email Inquiry and AI chat need Netlify.)
 
 ## Edit the content (you never need to touch the layout)
 
@@ -53,20 +53,27 @@ The visitor then picks one of three buttons:
   already written to +1 732-823-7221.
 - **Call** dials +1 732-823-7221.
 
-### Email Inquiry setup (Netlify, one time)
+### Email Inquiry setup (one time)
 
-Email Inquiry uses Netlify Forms, which is built into Netlify: no extra account, key or code.
+Email Inquiry sends each inquiry through `netlify/functions/inquiry.mjs`, which emails it from your own Gmail
+(AgarAndOak@gmail.com) to the same inbox, with the visitor's address as Reply-To: just press Reply to answer them.
+The page only says "Sent" once Gmail has accepted the email; otherwise the visitor sees an error and a link to send
+the same message from their own email app.
 
-1. In Netlify, open the site → **Forms** → **Enable form detection**, then redeploy (or push to the branch) so Netlify finds the `inquiry` form.
-2. Add the email alert: **Site (or Project) configuration → Notifications → Emails and webhooks → Form submission notifications →
-   Add notification → Email notification**, choose the `inquiry` form and enter `AgarAndOak@gmail.com`.
-3. Send yourself a test inquiry from the live site. Every inquiry is also saved under **Forms** in Netlify.
+1. **Turn on 2-Step Verification** for AgarAndOak@gmail.com (Google Account → Security), if it isn't on already.
+2. **Create an App Password** at https://myaccount.google.com/apppasswords. Name it "Agar & Oak website" and copy
+   the 16-letter password Google shows (spaces don't matter). This lets the website send email from your account
+   without your real password; you can delete it there any time to switch sending off.
+3. **Add it to Netlify:** Project configuration → Environment variables → Add a variable →
+   key `GMAIL_APP_PASSWORD`, value the 16-letter password.
+4. **Redeploy:** Deploys → Trigger deploy → Deploy project.
+5. Send yourself a test inquiry from the live site. It arrives from "Agar & Oak website" with the subject
+   "[Website] …" (for example "[Website] Waitlist: Venus flytrap TC jar").
 
-The email subject is the inquiry's subject line (for example "Waitlist: Venus flytrap TC jar"), and the visitor's email is in the message so you can reply.
-Netlify filters spam (there's also a hidden trap field for bots); check the form's spam list in Netlify now and then.
-Netlify's plans include a monthly allowance of form submissions; check its pricing page for your plan.
-Until form detection is on, or if the site is opened from your computer, sending fails and visitors get the "send it from your email app" link.
-To skip all this and always open the visitor's email app, set `EMAIL_FROM_SITE = false` in `config.js`.
+The site must be deployed from this GitHub repository (not drag-and-drop), so Netlify builds the function.
+There's a hidden trap field for spam bots. To always open the visitor's email app instead, set
+`EMAIL_FROM_SITE = false` in `config.js`. If you change the Gmail address, set `EMAIL` in `config.js`; to send
+from a different Gmail account than the one that receives, also add `GMAIL_USER` in Netlify.
 
 ## Chat assistant
 
@@ -89,7 +96,7 @@ The "Ask a question" button opens a chat that answers general questions.
 - [ ] Before shipping premium isopods out of state, check that *Armadillidium klugii* and *A. maculatum* are both named on your USDA permit.
 - [ ] `assets/js/config.js`: add `INSTAGRAM` if you have one.
 - [ ] Check the promises in `differences.js` before launch, especially the two guarantees (30 days on rooted starter plants; replacing a starter culture that crashes in its first month), the springtail subscription and display jars, and the QR care-video card.
-- [ ] Turn on Email Inquiry in Netlify (see "Email Inquiry setup" above) and send a test inquiry.
+- [ ] Turn on Email Inquiry: add `GMAIL_APP_PASSWORD` in Netlify (see "Email Inquiry setup" above) and send a test inquiry.
 - [ ] Optional: switch on AI chat answers (see "Chat assistant" above).
 - [ ] `privacy.html`: update the "Last updated" date whenever you change the page.
 

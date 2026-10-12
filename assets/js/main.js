@@ -516,7 +516,8 @@
   });
 
   /* ---------- Email Inquiry ----------
-     Sends the form to Netlify Forms, which emails it to us, so the visitor stays on the page.
+     Sends the form to /api/inquiry (a Netlify Function), which emails it to us from our Gmail,
+     so the visitor stays on the page. It only reports success once Gmail has accepted the email.
      A page can supply its own sender as window.AGAR_INQUIRY_SENDER (the preview does).
      If sending fails, the visitor gets a link to send the same message from their email app. */
   var fromSite = typeof EMAIL_FROM_SITE === "undefined" || EMAIL_FROM_SITE;
@@ -554,15 +555,16 @@
     return "";
   }
 
-  function netlifySend(data) {
+  function siteSend(data) {
     var body = Object.keys(data).map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(data[k]); }).join("&");
-    return fetch(form.getAttribute("action") || "/", {
+    return fetch(form.getAttribute("action"), {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
       body: body
     }).then(function (res) {
-      if (!res.ok) throw new Error("http_" + res.status);
-      return {};
+      return res.json().catch(function () { return {}; }).then(function (reply) {
+        if (!res.ok || !reply.ok) throw new Error(reply.error || "http_" + res.status);
+      });
     });
   }
 
@@ -585,7 +587,6 @@
 
     var p = productById(state.productId);
     var data = {
-      "form-name": form.getAttribute("name"),
       "bot-field": form.querySelector('[name="bot-field"]').value,
       subject: currentSubject(),
       product: p ? p.name : "General question",
@@ -599,7 +600,7 @@
     els.send.setAttribute("aria-disabled", "true");
     els.sendLabel.textContent = "Sending…";
     showStatus("", "Sending your inquiry…");
-    (window.AGAR_INQUIRY_SENDER || netlifySend)(data).then(function () {
+    (window.AGAR_INQUIRY_SENDER || siteSend)(data).then(function () {
       state.subject = "";
       render({ force: true }); // a fresh message, so a second tap doesn't send it twice
       showStatus("ok", "Sent. Thanks! We'll reply to " + email + ".");

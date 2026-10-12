@@ -9,9 +9,9 @@ const PHONE = "+17328237221";            // E.164 format for tel: and sms: links
 const PHONE_DISPLAY = "+1 732-823-7221"; // how the number is shown on the page
 const INSTAGRAM = "";                    // a handle ("agarandoak") or full URL; leave "" to hide it
 
-// true: "Email Inquiry" sends the message from this page through Netlify Forms, and the
-// visitor stays on the site (turn on form detection and an email notification in Netlify,
-// see README). false: it opens the visitor's own email app instead.
+// true: "Email Inquiry" sends the message from this page to EMAIL through our Gmail, and the
+// visitor stays on the site (needs GMAIL_APP_PASSWORD set in Netlify, see README).
+// false: it opens the visitor's own email app instead.
 const EMAIL_FROM_SITE = true;
 
 // Legal flags. Flip to true as each license arrives.

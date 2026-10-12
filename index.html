@@ -532,9 +532,8 @@
           <figcaption>No cart and no payment: just a message to us.</figcaption>
         </figure>
 
-        <!-- Netlify Forms: "Email Inquiry" posts this form to Netlify, which emails it to us (setup in README). -->
-        <form class="inquiry card" id="inquiry-form" name="inquiry" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-          <input type="hidden" name="form-name" value="inquiry">
+        <!-- "Email Inquiry" posts this form to /api/inquiry (netlify/functions/inquiry.mjs), which emails it to us. Setup in README. -->
+        <form class="inquiry card" id="inquiry-form" method="POST" action="/api/inquiry" novalidate>
           <input type="hidden" name="subject" id="inquiry-subject" value="">
           <p class="hp" hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 

@@ -1,8 +1,9 @@
 {
   "name": "agar-and-oak-website",
   "private": true,
-  "description": "Agar & Oak website. Static site; the only dependency is for the optional AI chat function on Netlify.",
+  "description": "Agar & Oak website. Static site; the dependencies are only for the Netlify functions (Email Inquiry and the optional AI chat).",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.131.0"
+    "@anthropic-ai/sdk": "^0.131.0",
+    "nodemailer": "10.0.11"
   }
 }

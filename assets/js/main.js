@@ -155,7 +155,7 @@
         var info = cardInfo(p);
         var titleId = "p-" + p.id;
         return '<li><article class="product" aria-labelledby="' + titleId + '">' +
-          '<img class="product-img" src="' + escapeHtml(p.image || "") + '" width="400" height="300" loading="lazy" alt="Photo coming soon: ' + escapeHtml(p.name) + '">' +
+          '<img class="product-img" src="' + escapeHtml(p.image || "") + '" width="400" height="300" loading="lazy" alt="' + escapeHtml(p.name) + '">' +
           '<div class="product-body">' +
             '<h3 id="' + titleId + '">' + escapeHtml(p.name) + "</h3>" +
             '<p class="product-purpose">' + p.purpose + "</p>" +

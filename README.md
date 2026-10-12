@@ -61,9 +61,7 @@ The "Ask a question" button opens a chat that answers general questions.
 ## TODO before launch
 
 - [ ] Logo: replace `assets/img/logo.svg` (header, footer and the sample labels) and `assets/img/favicon.svg` (browser tab) with your own. Any shape works; it's shown at a fixed height.
-- [ ] Photos: every dark-brown "?" box is a placeholder. Product photos (including the three "testing next" cards): set each product's `image` in `products.js`. The two "What we make" photos: change the `src` of the two `img-slot` images in `index.html`. Use your own photos or ones whose license allows commercial use, and keep a note of where each came from.
-- [ ] Founder note (About section in `index.html`): a draft is in place. Rewrite it in your own words and check every detail.
-- [ ] Share image: replace `assets/img/og-image.png` (1200 × 630) with a real image.
+- [ ] Photos are in `assets/img/products/` (one per product) and `assets/img/photos/` (the two "What we make" cards); the link-preview image is `assets/img/og-image.png` (1200 × 630). Swap any of them for your own photos of your actual products when you have them.
 - [ ] `SURVEY_URL` in `config.js`: paste your Google Forms link.
 - [ ] `SITE_URL` in `config.js`: set it once you have an address. Link-preview crawlers don't run JavaScript, so also uncomment the `og:url` tag in `index.html` and use full `https://` links in the `og:image` and `twitter:image` tags.
 - [ ] Before shipping premium isopods out of state, check that *Armadillidium klugii* and *A. maculatum* are both named on your USDA permit.

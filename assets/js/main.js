@@ -599,10 +599,10 @@
     els.send.setAttribute("aria-disabled", "true");
     els.sendLabel.textContent = "Sending…";
     showStatus("", "Sending your inquiry…");
-    (window.AGAR_INQUIRY_SENDER || netlifySend)(data).then(function (result) {
+    (window.AGAR_INQUIRY_SENDER || netlifySend)(data).then(function () {
       state.subject = "";
       render({ force: true }); // a fresh message, so a second tap doesn't send it twice
-      showStatus("ok", "Sent. Thanks! We'll reply to " + email + "." + (result && result.note ? " " + result.note : ""));
+      showStatus("ok", "Sent. Thanks! We'll reply to " + email + ".");
     }, function () {
       showStatus("error", "Sorry, we couldn't send that from the website.", true);
     }).then(function () {

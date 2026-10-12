@@ -91,11 +91,14 @@
 
     <!-- ============ About ============ -->
     <section class="section band-soft" id="about" aria-labelledby="about-title">
-      <div class="wrap narrow">
-        <h2 id="about-title">Why we exist</h2>
-        <blockquote class="goal">
-          <p>Agar &amp; Oak exists to make living ecosystems easy to start. We grow plants in sterile culture in the lab and breed mite-checked cleanup crews in-house, so hobbyists and shops never need to take plants or animals from the wild.</p>
-        </blockquote>
+      <div class="wrap about-grid">
+        <img class="about-img" src="assets/img/photos/lab-tissue-culture.webp" width="900" height="675" loading="lazy" decoding="async" alt="A lab worker holding a tissue-culture jar beside shelves of plant jars">
+        <div class="about-text">
+          <h2 id="about-title">Why we exist</h2>
+          <blockquote class="goal">
+            <p>Agar &amp; Oak exists to make living ecosystems easy to start. We grow plants in sterile culture in the lab and breed mite-checked cleanup crews in-house, so hobbyists and shops never need to take plants or animals from the wild.</p>
+          </blockquote>
+        </div>
       </div>
     </section>
 
@@ -632,6 +635,22 @@
       <p class="fine">No payments are processed on this website.</p>
     </div>
   </footer>
+
+  <!-- ============ Survey pop-up: opens once, SURVEY_POPUP_SECONDS after the page loads ============ -->
+  <dialog class="survey-pop" id="survey-pop" aria-labelledby="survey-pop-title" aria-describedby="survey-pop-text">
+    <div class="survey-pop-inner">
+      <button type="button" class="survey-pop-close" data-close aria-label="Close the survey invitation">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="survey-pop-kicker">Anonymous · about 1 minute</p>
+      <h2 class="survey-pop-title" id="survey-pop-title">Take our 1&#8209;minute survey</h2>
+      <p class="survey-pop-text" id="survey-pop-text">Help us decide what to grow and breed next. Your answers are anonymous.</p>
+      <div class="survey-pop-actions">
+        <a class="btn" id="survey-pop-go" href="#" target="_blank" rel="noopener">Take the survey<span class="sr-only"> (opens in a new tab)</span></a>
+        <button type="button" class="btn btn-outline" data-close>Not now</button>
+      </div>
+    </div>
+  </dialog>
 
   <!-- ============ Chat assistant ============ -->
   <div class="chat" id="chat" hidden>

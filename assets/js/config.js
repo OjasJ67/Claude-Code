@@ -16,7 +16,8 @@ const FLAGS = {
 };
 
 // Links and numbers that aren't ready yet. Leave "" until you have them.
-const SURVEY_URL = "";    // your Google Forms survey link; the survey button stays hidden while this is ""
+const SURVEY_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdexlx_5oCwEDyn9bJ6aoiR7_3KDOL3g1SvHAA6GQyFav5Lxg/viewform"; // your Google Forms survey; "" hides the survey button and pop-up
+const SURVEY_POPUP_SECONDS = 20; // seconds before the survey pop-up appears; 0 turns the pop-up off
 const SITE_URL = "";      // the site's full address, e.g. "https://agarandoak.com/" (used for link previews)
 const SURVIVAL_RATE = ""; // your measured 4-week survival rate, e.g. "94%"; the plant label says "posted once measured" until then
 
@@ -27,5 +28,5 @@ const CHAT_ENDPOINT = "";
 
 // Lets the Netlify chat function read these settings. Ignored by browsers.
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { EMAIL, PHONE, PHONE_DISPLAY, INSTAGRAM, FLAGS, SURVEY_URL, SITE_URL, SURVIVAL_RATE, CHAT_ENDPOINT };
+  module.exports = { EMAIL, PHONE, PHONE_DISPLAY, INSTAGRAM, FLAGS, SURVEY_URL, SURVEY_POPUP_SECONDS, SITE_URL, SURVIVAL_RATE, CHAT_ENDPOINT };
 }

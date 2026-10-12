@@ -34,7 +34,9 @@ update from these flags automatically.
 
 ### Other settings (`config.js`)
 
-- `SURVEY_URL`: your Google Forms link. The "Take the 1-minute survey" button stays hidden until it's set.
+- `SURVEY_URL`: your Google Forms link. It drives the "Take the 1-minute survey" button and the survey pop-up; set it to `""` to hide both.
+- `SURVEY_POPUP_SECONDS`: how long after the page opens the survey pop-up appears (20 by default). `0` turns the pop-up off.
+  It shows once per visit, never while someone is typing or using the chat, and not at all if they already opened the survey.
 - `SITE_URL`: your site's full address. Used for link previews (`og:url` and full image links).
 - `SURVIVAL_RATE`: your measured 4-week survival rate, like `"94%"`. Until then the plant label says "posted once measured".
 
@@ -62,7 +64,6 @@ The "Ask a question" button opens a chat that answers general questions.
 
 - [ ] Logo: replace `assets/img/logo.svg` (header, footer and the sample labels) and `assets/img/favicon.svg` (browser tab) with your own. Any shape works; it's shown at a fixed height.
 - [ ] Photos are in `assets/img/products/` (one per product) and `assets/img/photos/` (the two "What we make" cards); the link-preview image is `assets/img/og-image.png` (1200 × 630). Swap any of them for your own photos of your actual products when you have them.
-- [ ] `SURVEY_URL` in `config.js`: paste your Google Forms link.
 - [ ] `SITE_URL` in `config.js`: set it once you have an address. Link-preview crawlers don't run JavaScript, so also uncomment the `og:url` tag in `index.html` and use full `https://` links in the `og:image` and `twitter:image` tags.
 - [ ] Before shipping premium isopods out of state, check that *Armadillidium klugii* and *A. maculatum* are both named on your USDA permit.
 - [ ] `assets/js/config.js`: add `INSTAGRAM` if you have one.

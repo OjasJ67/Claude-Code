@@ -562,6 +562,42 @@
     });
   }
 
+  /* ---------- Survey pop-up: once per page load, after SURVEY_POPUP_SECONDS ---------- */
+  function setupSurveyPopup() {
+    var pop = $("#survey-pop");
+    var url = typeof SURVEY_URL !== "undefined" ? String(SURVEY_URL).trim() : "";
+    var secs = typeof SURVEY_POPUP_SECONDS !== "undefined" ? Number(SURVEY_POPUP_SECONDS) : 20;
+    if (!pop || !url || !(secs > 0) || typeof pop.showModal !== "function") return;
+    var go = $("#survey-pop-go");
+    go.href = url;
+    var answered = false; // skip the pop-up if they already opened the survey
+    var lastFocus = null;
+    document.addEventListener("click", function (e) {
+      if (e.target.closest("#survey-link, #survey-pop-go")) answered = true;
+    });
+    // Don't interrupt someone who is typing or using the chat; try again shortly.
+    function busy() {
+      var a = document.activeElement;
+      var chat = $("#chat-panel");
+      return (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) || (chat && !chat.hidden);
+    }
+    function open() {
+      if (answered) return;
+      if (busy()) { window.setTimeout(open, 10000); return; }
+      lastFocus = document.activeElement;
+      pop.showModal();
+    }
+    pop.addEventListener("click", function (e) {
+      // A click outside the card (on the backdrop) or on a close button closes it.
+      if (e.target === pop || e.target.closest("[data-close]")) pop.close();
+    });
+    go.addEventListener("click", function () { window.setTimeout(function () { pop.close(); }, 0); });
+    pop.addEventListener("close", function () {
+      if (lastFocus && lastFocus.focus && lastFocus !== document.body) lastFocus.focus({ preventScroll: true });
+    });
+    window.setTimeout(open, secs * 1000);
+  }
+
   /* ---------- Boot ---------- */
   fillContact();
   renderReferences();
@@ -569,6 +605,7 @@
   renderProducts();
   renderShippingFaq();
   applySettings();
+  setupSurveyPopup();
   fillProductSelect();
 
   var params = new URLSearchParams(window.location.search);

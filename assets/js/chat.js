@@ -180,8 +180,9 @@
 
   els.launcher.addEventListener("click", function () { open(); });
   els.close.addEventListener("click", close);
-  els.panel.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { e.stopPropagation(); close(); }
+  // Listen on the document: tapping a suggestion removes it, which drops focus out of the panel.
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !els.panel.hidden) close();
   });
   els.form.addEventListener("submit", function (e) {
     e.preventDefault();

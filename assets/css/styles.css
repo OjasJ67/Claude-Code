@@ -524,7 +524,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
 .contact-direct li[hidden] { display: none; }
 
 /* ---------- Footer ---------- */
-.site-footer { padding: 48px 0 calc(96px + env(safe-area-inset-bottom, 0px)); background: var(--deep); color: var(--ink); border-top: 1px solid var(--line); }
+.site-footer { padding: 48px 0 calc(64px + env(safe-area-inset-bottom, 0px)); background: var(--deep); color: var(--ink); border-top: 1px solid var(--line); }
 .site-footer a { color: var(--ink); }
 .footer-inner { display: grid; gap: 6px; justify-items: start; font-size: 0.95rem; }
 .footer-inner p { margin: 0; }
@@ -533,9 +533,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
 
 /* ---------- Chat assistant ---------- */
 .chat[hidden], .chat-panel[hidden] { display: none; }
+/* Top right, just under the header (the bottom-right corner is left free for the host's badge).
+   It sits below the header layer so the open phone menu covers it. */
 .chat-launcher {
-  position: fixed; z-index: 60;
-  right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  position: fixed; z-index: 40;
+  right: 16px; top: calc(var(--header-h) + 12px + env(safe-area-inset-top, 0px));
   display: inline-flex; align-items: center; gap: 8px;
   min-height: 52px; padding: 12px 20px;
   border: 2px solid var(--bg); border-radius: 999px;
@@ -553,14 +555,14 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
 
 .chat-panel {
   position: fixed; z-index: 70;
-  left: 8px; right: 8px; bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-  max-height: min(640px, calc(100% - 80px));
+  left: 8px; right: 8px; top: calc(var(--header-h) + 8px + env(safe-area-inset-top, 0px));
+  max-height: min(640px, calc(100% - var(--header-h) - 16px - env(safe-area-inset-top, 0px)));
   display: flex; flex-direction: column;
   background: var(--bg); border: 1.5px solid var(--ink); border-radius: 16px;
   overflow: hidden;
 }
 @media (min-width: 560px) {
-  .chat-panel { left: auto; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 400px; }
+  .chat-panel { left: auto; right: 16px; top: calc(var(--header-h) + 12px + env(safe-area-inset-top, 0px)); width: 400px; }
 }
 .chat-head {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;

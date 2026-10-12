@@ -4,7 +4,7 @@
    ========================================================================== */
 
 // Contact details used by every "Buy now" button, the contact section and privacy page.
-const EMAIL = "AgarOakContact@gmail.com";
+const EMAIL = "AgarAndOak@gmail.com";
 const PHONE = "+17328237221";            // E.164 format for tel: and sms: links (no spaces)
 const PHONE_DISPLAY = "+1 732-823-7221"; // how the number is shown on the page
 const INSTAGRAM = "";                    // a handle ("agarandoak") or full URL; leave "" to hide it

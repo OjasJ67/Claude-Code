@@ -16,7 +16,7 @@ const FLAGS = {
 };
 
 // Links and numbers that aren't ready yet. Leave "" until you have them.
-const SURVEY_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdexlx_5oCwEDyn9bJ6aoiR7_3KDOL3g1SvHAA6GQyFav5Lxg/viewform"; // your Google Forms survey; "" hides the survey button and pop-up
+const SURVEY_URL = "https://forms.gle/LbjYci4FycCzMYqG7"; // your Google Forms survey; "" hides the survey button and pop-up
 const SURVEY_POPUP_SECONDS = 20; // seconds before the survey pop-up appears; 0 turns the pop-up off
 const SITE_URL = "";      // the site's full address, e.g. "https://agarandoak.com/" (used for link previews)
 const SURVIVAL_RATE = ""; // your measured 4-week survival rate, e.g. "94%"; the plant label says "posted once measured" until then

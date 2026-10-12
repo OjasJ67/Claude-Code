@@ -100,7 +100,7 @@
     els.tag.textContent = "";
     var head = el("div", "tag-head");
     var logo = el("img", "tag-logo");
-    logo.src = "assets/img/logo.svg";
+    logo.src = "assets/img/logo-mark.png";
     logo.alt = "";
     logo.width = 30;
     logo.height = 30;

@@ -7,6 +7,9 @@ Plain HTML, CSS and JavaScript. No build step, no cookies, no analytics, and no 
 
 - **On your computer:** double-click `index.html`.
 - **Deploy:** connect this GitHub repository to Netlify; every push then goes live. (Other static hosts work too, but Email Inquiry and AI chat need Netlify.)
+  Keep the repository **public**: Netlify's free plan only builds commits from your own linked Git account on private repositories,
+  so commits made by Claude would be blocked as an "unrecognized Git contributor". Nothing secret is in the code; the Gmail
+  App Password and any API keys live only in Netlify's environment variables.
 
 ## Edit the content (you never need to touch the layout)
 

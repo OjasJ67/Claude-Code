@@ -21,6 +21,10 @@ const ASSISTANT = (function () {
       id: "price",
       keys: ["price", "prices", "cost", "how much", "cheap", "expensive"],
       answer: function (ctx) {
+        if (!ctx.flags.njNurseryCertified) {
+          return "Cleanup crews start at $" + minPrice(ctx.products, "crews", ctx.flags) + (ctx.flags.usdaPPQ526Permit ? "" : " (pickup price)") +
+            ". Plants are waitlist only, with no prices until our nursery certificate is issued. Ask me about a specific product, like \"How much is the springtail culture?\"";
+        }
         return "Prices are on each product card. Plants run from $" + minPrice(ctx.products, "plants", ctx.flags) +
           " and cleanup crews from $" + minPrice(ctx.products, "crews", ctx.flags) +
           ". Ask me about a specific product, like \"How much is the Venus flytrap jar?\"";
@@ -38,8 +42,13 @@ const ASSISTANT = (function () {
     },
     {
       id: "legal",
-      keys: ["legal", "allowed", "permit", "usda", "law", "regulation", "illegal", "cubaris"],
-      answer: "We only breed isopod species that USDA allows to be kept and moved without a containment facility."
+      keys: ["legal", "allowed", "permit", "usda", "law", "regulation", "illegal", "cubaris", "ship cleanup crews", "ship crews", "ship isopods", "ship springtails"],
+      answer: function (ctx) {
+        return (ctx.flags.usdaPPQ526Permit
+          ? "Yes, to the lower 48 states. We ship only species named on our USDA permit."
+          : "Not yet. Cleanup crews are New Jersey pickup only until our USDA permit is issued.") +
+          " We never sell Cubaris, Nesodillo or Merulanella, which need a USDA containment facility.";
+      }
     },
     {
       id: "jar",
@@ -64,7 +73,7 @@ const ASSISTANT = (function () {
     {
       id: "guarantee",
       keys: ["guarantee", "guaranteed", "warranty", "refund", "replace", "replacement", "died", "dies", "crash", "crashed", "live arrival"],
-      answer: "Rooted starter plants come with a 30-day guarantee, and if an isopod starter culture crashes in its first month, we replace it. Just tell us what happened."
+      answer: "Rooted starter plants: if a plant dies within 30 days of pickup or delivery and you followed the care card, send us a photo and we'll replace or refund it. Cleanup-crew starter cultures: if a culture crashes within 30 days, send a photo and we'll replace it. Tissue-culture jars and wholesale orders aren't covered. Email or text us to make a claim."
     },
     {
       id: "subscription",
@@ -82,8 +91,8 @@ const ASSISTANT = (function () {
     },
     {
       id: "pesticides",
-      keys: ["pesticide", "insecticide", "sprayed", "spray", "chemicals", "vivarium-safe", "vivarium safe", "safe for frogs", "plants safe", "neonicotinoid"],
-      answer: "We never spray pesticides on our plants, so they're vivarium-safe. Many store plants are treated with insecticides, which can harm frogs and isopods."
+      keys: ["pesticide", "insecticide", "sprayed", "spray", "chemicals", "safe for frogs", "plants safe", "neonicotinoid"],
+      answer: "We never spray pesticides on our plants."
     },
     {
       id: "tc",
@@ -92,8 +101,8 @@ const ASSISTANT = (function () {
     },
     {
       id: "pests",
-      keys: ["pest", "pests", "bugs", "pest-free", "gnat", "gnats", "mites", "hitchhiker"],
-      answer: "Our plants are grown in sterile culture in sealed jars, so they start out free of the hitchhiking pests that often come with cuttings or nursery plants."
+      keys: ["pest", "pests", "bugs", "gnat", "gnats", "mites", "hitchhiker"],
+      answer: "Our plants are grown in sterile culture in sealed jars, with no pesticides used, and our cleanup crews are mite-checked before they go out."
     },
     {
       id: "crews",
@@ -123,7 +132,7 @@ const ASSISTANT = (function () {
     {
       id: "where",
       keys: ["where are you", "location", "located", "new jersey", "nj", "address", "visit"],
-      answer: "We're a small business in New Jersey. We don't list a street address; we arrange pickup details personally when you inquire."
+      answer: "We're Agar & Oak LLC in North Brunswick, New Jersey. We don't list a street address; we arrange pickup details personally when you inquire."
     },
     {
       id: "wild",
@@ -145,7 +154,10 @@ const ASSISTANT = (function () {
     "premium-isopods-10": ["premium isopod", "premium morph", "magic potion", "zebra isopod", "clown", "armadillidium"],
     "springtail-culture": ["springtail culture", "folsomia", "buy springtails"],
     "cleanup-combo": ["combo", "cleanup-crew combo", "cleanup crew combo"],
-    "feeder-pack-50": ["feeder", "feeders", "live food", "feeder pack"]
+    "feeder-pack-50": ["feeder", "feeders", "live food", "feeder pack"],
+    "fruit-fly-cultures": ["fruit fly", "fruit flies", "drosophila", "flightless"],
+    "mushroom-cultures": ["mushroom", "mushrooms", "oyster", "lion's mane", "shiitake", "grain spawn", "liquid culture"],
+    "copepods-phytoplankton": ["copepod", "copepods", "phytoplankton", "reef"]
   };
 
   // Topics that only give general background; more specific topics win ties.
@@ -178,14 +190,30 @@ const ASSISTANT = (function () {
     if (p.line === "crews") {
       return flags.usdaPPQ526Permit ? "ships to the lower 48 states or local pickup" : "New Jersey local pickup only for now";
     }
+    if (p.line === "next") return "still in testing and not for sale yet";
+    if (!flags.njNurseryCertified) return "waitlist only; we'll post prices once our nursery certificate is issued";
     if (p.status === "coming-later") return "coming later; we're taking inquiries";
-    return flags.njNurseryCertified ? "available" : "on a waitlist; we're taking inquiries";
+    return "available";
+  }
+
+  // Whether a product's price may be shown (plants stay unpriced until the nursery certificate).
+  function hasPrice(p, flags) {
+    if (p.line === "next") return false;
+    return p.line !== "plants" || flags.njNurseryCertified;
   }
 
   function productAnswer(p, flags) {
-    var price = "$" + shownPrice(p, flags) + " " + p.priceUnit + (p.line === "crews" && !flags.usdaPPQ526Permit ? " (pickup price)" : "");
+    if (p.line === "next") {
+      return p.name + ": " + plainText(p.purpose) + " We're " + productStatus(p, flags) +
+        ". Tap \"I'd use this\" in \"What we're testing next\" to tell us what you'd buy.";
+    }
+    var price = hasPrice(p, flags)
+      ? "$" + shownPrice(p, flags) + " " + p.priceUnit + (p.line === "crews" && !flags.usdaPPQ526Permit ? " (pickup price)" : "") + ", "
+      : "";
     var extra = p.wholesaleOnly ? " Wholesale only, minimum " + p.minQty + "." : "";
-    return p.name + ": " + plainText(p.purpose) + " " + price + ", " + productStatus(p, flags) + "." + extra +
+    var status = productStatus(p, flags);
+    if (!price) status = status.charAt(0).toUpperCase() + status.slice(1);
+    return p.name + ": " + plainText(p.purpose) + " " + price + status + "." + extra +
       " Tap its button on the page to send us a ready-made message.";
   }
 
@@ -243,6 +271,7 @@ const ASSISTANT = (function () {
     // Helpers shared with assistant-prompt.js
     shippingText: shippingText,
     shownPrice: shownPrice,
+    hasPrice: hasPrice,
     productStatus: productStatus,
     plainText: plainText
   };

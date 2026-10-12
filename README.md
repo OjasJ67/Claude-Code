@@ -12,8 +12,8 @@ Plain HTML, CSS and JavaScript. No build step, no cookies, no analytics, and no 
 
 | File | What it holds |
 | --- | --- |
-| `assets/js/config.js` | Email, phone, Instagram, the two legal flags, and the chat setting |
-| `assets/js/products.js` | Every product card: name, one-line purpose, prices, status |
+| `assets/js/config.js` | Email, phone, Instagram, the two legal flags, the survey link, site address, survival rate and the chat setting |
+| `assets/js/products.js` | Every product card: name, one-line purpose, prices, status, and the "What we're testing next" items |
 | `assets/js/stats.js` | The big statistics and where each one appears |
 | `assets/js/references.js` | The numbered reference list (stats and biology claims link here) |
 | `assets/js/differences.js` | "What makes us different": every line on the two sample labels, what it means, and the subscription and display-jar offers |
@@ -23,12 +23,20 @@ Plain HTML, CSS and JavaScript. No build step, no cookies, no analytics, and no 
 
 ### Legal flags (`config.js`)
 
-- `njNurseryCertified`: while `false`, plant cards read "Waitlist · taking inquiries" with a "Reserve: inquire" button.
-  Set it to `true` once the NJ Dept. of Agriculture nursery certificate arrives: cards switch to "Available" and "Buy now".
+- `njNurseryCertified`: while `false`, plants are waitlist only. No plant price appears anywhere on the site (cards,
+  planner, inquiry form, messages, chat), and plant buttons read "Join the waitlist". Set it to `true` once the NJ Dept.
+  of Agriculture nursery certificate arrives: prices come back and buttons read "Buy now".
 - `usdaPPQ526Permit`: while `false`, cleanup crews show pickup prices and "NJ local pickup only", and shipping is
   disabled in the inquiry form. Set it to `true` once the USDA permit arrives: shipped prices and "Ships to the lower 48 states" appear.
 
-The "Do you ship?" FAQ answer updates from these flags automatically.
+The "Do you ship?" and "Can you ship cleanup crews?" FAQ answers, the cleanup-crew label and the For shops small print
+update from these flags automatically.
+
+### Other settings (`config.js`)
+
+- `SURVEY_URL`: your Google Forms link. The "Take the 1-minute survey" button stays hidden until it's set.
+- `SITE_URL`: your site's full address. Used for link previews (`og:url` and full image links).
+- `SURVIVAL_RATE`: your measured 4-week survival rate, like `"94%"`. Until then the plant label says "posted once measured".
 
 ### How "Buy now" works
 
@@ -52,19 +60,25 @@ The "Ask a question" button opens a chat that answers general questions.
 
 ## TODO before launch
 
-- [ ] `assets/js/config.js`: add `INSTAGRAM` if you have one.
 - [ ] Logo: replace `assets/img/logo.svg` (header, footer and the sample labels) and `assets/img/favicon.svg` (browser tab) with your own. Any shape works; it's shown at a fixed height.
-- [ ] Photos: every dark-brown "?" box is a placeholder. Product photos: set each product's `image` in `products.js`. The two "What we make" photos: change the `src` of the two `img-slot` images in `index.html`.
+- [ ] Photos: every dark-brown "?" box is a placeholder. Product photos (including the three "testing next" cards): set each product's `image` in `products.js`. The two "What we make" photos: change the `src` of the two `img-slot` images in `index.html`. Use your own photos or ones whose license allows commercial use, and keep a note of where each came from.
+- [ ] Founder note (About section in `index.html`): a draft is in place. Rewrite it in your own words and check every detail.
+- [ ] Share image: replace `assets/img/og-image.png` (1200 × 630) with a real image.
+- [ ] `SURVEY_URL` in `config.js`: paste your Google Forms link.
+- [ ] `SITE_URL` in `config.js`: set it once you have an address. Link-preview crawlers don't run JavaScript, so also uncomment the `og:url` tag in `index.html` and use full `https://` links in the `og:image` and `twitter:image` tags.
+- [ ] Before shipping premium isopods out of state, check that *Armadillidium klugii* and *A. maculatum* are both named on your USDA permit.
+- [ ] `assets/js/config.js`: add `INSTAGRAM` if you have one.
 - [ ] Check the promises in `differences.js` before launch, especially the two guarantees (30 days on rooted starter plants; replacing a starter culture that crashes in its first month), the springtail subscription and display jars, and the QR care-video card.
 - [ ] Optional: switch on AI chat answers (see "Chat assistant" above).
-- [ ] `index.html`, About section: replace "TODO: 2–3 sentences about you and why you started this."
-- [ ] `privacy.html`: fill in the "Last updated" date.
+- [ ] `privacy.html`: update the "Last updated" date whenever you change the page.
 
 ## Copy rules (keep these when editing)
 
 - Never call a product a fertilizer, plant food, soil amendment or soil improver.
-- No medical or health claims about any plant.
-- No product-effect guarantees: say "helps control mold" and "grown in sterile culture". The only guarantees on the site are the two replacement guarantees in `differences.js`.
-- Say "USDA-allowed species", never "USDA-approved".
+- No medical or health claims about any plant, mushroom or other product.
+- Never claim products are free of pests. Plants: "grown in sterile culture" or "no pesticides used". Cleanup crews: "mite-checked".
+- No product-effect guarantees: say "helps control mold". The only guarantees are the two in the FAQ "What do your guarantees cover?".
+- Don't describe species as "USDA-approved". Once the permit arrives, say you ship only species named on your USDA permit.
 - Species names only; no patented or trademarked cultivar names.
-- Cleanup crews: only species USDA allows without a containment facility (never Cubaris, Nesodillo or Merulanella).
+- Cleanup crews: never Cubaris, Nesodillo or Merulanella (they need a USDA containment facility).
+- No street address anywhere on the site; "North Brunswick, New Jersey" is as specific as it gets.

@@ -10,6 +10,7 @@
   if (!root || typeof DIFFERENCES === "undefined") return;
 
   var flags = typeof FLAGS !== "undefined" ? FLAGS : { njNurseryCertified: false, usdaPPQ526Permit: false };
+  var survivalRate = typeof SURVIVAL_RATE !== "undefined" ? String(SURVIVAL_RATE).trim() : "";
   var labels = DIFFERENCES.labels;
 
   var els = {
@@ -49,6 +50,9 @@
     var extra = flags.usdaPPQ526Permit ? item.afterPermit : item.beforePermit;
     return extra ? " " + extra : "";
   }
+  // The survival line switches to the measured wording once SURVIVAL_RATE is set.
+  function lineOf(f) { return survivalRate && f.lineMeasured ? f.lineMeasured.replace("{rate}", survivalRate) : f.line; }
+  function bodyOf(f) { return survivalRate && f.bodyMeasured ? f.bodyMeasured.replace("{rate}", survivalRate) : f.body; }
   function fillLine(text) {
     return text.replace("{tank}", state.tank || "").replace("{date}", packDate);
   }
@@ -115,7 +119,7 @@
       b.setAttribute("data-feature", f.id);
       b.setAttribute("aria-pressed", String(state.chosen[label.id] === f.id));
       b.appendChild(el("span", "tag-num", String(i + 1)));
-      b.appendChild(el("span", "tag-text", fillLine(f.line)));
+      b.appendChild(el("span", "tag-text", fillLine(lineOf(f))));
       b.addEventListener("click", function () { choose(label, f.id, null); });
       li.appendChild(b);
       list.appendChild(li);
@@ -166,7 +170,7 @@
     els.detail.textContent = "";
     els.detail.appendChild(el("p", "detail-kicker", "How we deliver it"));
     els.detail.appendChild(el("h3", "detail-title", f.title));
-    els.detail.appendChild(el("p", "detail-body", f.body + permitText(f)));
+    els.detail.appendChild(el("p", "detail-body", bodyOf(f) + permitText(f)));
 
     if (f.steps) {
       var ol = el("ol", "detail-steps");
@@ -188,7 +192,7 @@
         input.addEventListener("change", function () {
           state.tank = t;
           var line = els.tag.querySelector('[data-feature="' + f.id + '"] .tag-text');
-          if (line) line.textContent = fillLine(f.line);
+          if (line) line.textContent = fillLine(lineOf(f));
         });
         lab.appendChild(input);
         lab.appendChild(el("span", "", t.charAt(0).toUpperCase() + t.slice(1)));
@@ -206,6 +210,7 @@
       els.detail.appendChild(ask);
     }
     if (f.id === "ready") appendLink("See our rooted starter plants", "#plant-products");
+    if (f.faq) appendLink("See what the guarantee covers", "#" + f.faq);
   }
 
   function appendLink(text, href) {

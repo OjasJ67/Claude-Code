@@ -5,9 +5,14 @@
    - {tank} and {date} in a line are filled in by the page.
    - `beforePermit` / `afterPermit` are added to `body` depending on
      FLAGS.usdaPPQ526Permit in config.js.
+   - `lineMeasured` / `bodyMeasured` replace `line` / `body` once
+     SURVIVAL_RATE is set in config.js ({rate} is filled in).
+   - `faq` links the explanation to a question in the FAQ.
    The chat assistant reads this file too, so its answers stay in sync.
    Copy rules: no guarantees beyond the two replacement guarantees below,
-   no health claims, no fertilizer wording, species names only.
+   no pest-free claims (plants: "grown in sterile culture" or "no pesticides
+   used"; cleanup crews: "mite-checked"), no health claims, no fertilizer
+   wording, species names only.
    ========================================================================== */
 const DIFFERENCES = {
   labels: [
@@ -20,26 +25,29 @@ const DIFFERENCES = {
         {
           id: "sterile",
           line: "Lab-grown in sterile culture",
-          title: "Clean from the jar",
-          body: "Our plants come out of sterile jars, so they don't bring gnats, mites or other hitchhikers into your tank."
+          title: "Grown in sterile culture",
+          body: "Every plantlet starts in a sealed, sterile jar on nutrient gel, cloned from one clean parent plant."
         },
         {
           id: "pesticides",
-          line: "Grown without pesticides · vivarium-safe",
-          title: "Vivarium-safe",
-          body: "We never spray pesticides. Many store plants are treated with insecticides, which can harm frogs and isopods."
+          line: "Grown without pesticides",
+          title: "No pesticides used",
+          body: "We never spray pesticides on our plants."
         },
         {
           id: "ready",
           line: "Rooted and hardened · 30-day guarantee",
           title: "Ready to grow",
-          body: "Rooted starter plants are established and hardened to room humidity and windowsill light before they leave us, and they come with a 30-day guarantee."
+          body: "Rooted starter plants are established and hardened to room humidity and windowsill light before they leave us, and they come with a 30-day guarantee.",
+          faq: "faq-guarantees"
         },
         {
           id: "survival",
-          line: "4-week survival rate: lab-tested",
+          line: "4-week survival rate: posted once measured",
+          lineMeasured: "4-week survival rate: {rate}",
           title: "Proven survival",
-          body: "We test every change to our lab methods on half our jars first, then count how many plants are still alive four weeks after leaving the jar. That real number goes on the label."
+          body: "We're counting how many plants are alive four weeks after leaving the jar, and we'll print the number once we have it.",
+          bodyMeasured: "We count how many plants are alive four weeks after leaving the jar. Our current number: {rate}."
         },
         {
           id: "fit",
@@ -70,7 +78,7 @@ const DIFFERENCES = {
         },
         {
           id: "clean",
-          line: "Pest-free · mite-checked",
+          line: "Mite-checked",
           title: "The same clean standard",
           body: "Our cleanup crews meet the same standard as our plants:",
           steps: [
@@ -87,17 +95,18 @@ const DIFFERENCES = {
         },
         {
           id: "usda",
-          line: "USDA-allowed species · ID verified",
+          line: "Species ID checked",
           title: "Compliance on the box",
-          body: "We only breed species that USDA allows to be kept and moved without a containment facility, and every culture's species ID is verified.",
-          beforePermit: "Once our USDA permit is issued, its number goes on the box too.",
-          afterPermit: "Our USDA permit number is printed on every box."
+          body: "We check the species of every culture.",
+          beforePermit: "Until our USDA permit is issued, cleanup crews are New Jersey pickup only.",
+          afterPermit: "We ship only species named on our USDA permit, and the permit number is printed on every box."
         },
         {
           id: "guarantee",
           line: "30-day colony guarantee",
           title: "30-day colony guarantee",
-          body: "If a starter culture crashes in its first month, we replace it."
+          body: "If a starter culture crashes in its first month, we replace it.",
+          faq: "faq-guarantees"
         }
       ]
     }

@@ -28,6 +28,9 @@
     return null;
   }
   function isCrew(p) { return p && p.line === "crews"; }
+  function isNext(p) { return p && p.line === "next"; }
+  // Plants are waitlist-only, with no prices shown, until the nursery certificate arrives.
+  function isWaitlist(p) { return p && p.line === "plants" && !flags.njNurseryCertified; }
   function canShip(p) { return !isCrew(p) || flags.usdaPPQ526Permit; }
   // Crews: shipped price only once the USDA permit is in; otherwise pickup price.
   function priceFor(p, delivery) {
@@ -123,17 +126,22 @@
         unit += ", pickup";
       }
       note = "Not available to Hawaii, Alaska or U.S. territories.";
+    } else if (isNext(p)) {
+      price = null;
+      badges.push({ text: "Testing · not for sale yet", cls: "badge-muted" });
+      cta = "I'd use this";
+    } else if (!flags.njNurseryCertified) {
+      price = null;
+      badges.push({ text: p.status === "coming-later" ? "Coming later · taking inquiries" : "Waitlist · taking inquiries", cls: p.status === "coming-later" ? "badge-muted" : "" });
+      cta = "Join the waitlist";
     } else {
       price = p.price;
       if (p.status === "coming-later") {
         badges.push({ text: "Coming later · taking inquiries", cls: "badge-muted" });
         cta = "Reserve: inquire";
-      } else if (flags.njNurseryCertified) {
+      } else {
         badges.push({ text: "Available", cls: "badge-solid" });
         cta = "Buy now";
-      } else {
-        badges.push({ text: "Waitlist · taking inquiries", cls: "" });
-        cta = "Reserve: inquire";
       }
     }
     if (p.wholesaleOnly) badges.push({ text: "Wholesale · min " + p.minQty, cls: "badge-muted" });
@@ -152,7 +160,7 @@
             '<h3 id="' + titleId + '">' + escapeHtml(p.name) + "</h3>" +
             '<p class="product-purpose">' + p.purpose + "</p>" +
             '<div class="product-foot">' +
-              '<p class="price">' + money(info.price) + ' <span class="price-unit">' + escapeHtml(info.unit) + "</span></p>" +
+              (info.price != null ? '<p class="price">' + money(info.price) + ' <span class="price-unit">' + escapeHtml(info.unit) + "</span></p>" : "") +
               '<ul class="badges">' + info.badges.map(function (b) {
                 return '<li class="badge ' + b.cls + '">' + escapeHtml(b.text) + "</li>";
               }).join("") + "</ul>" +
@@ -177,7 +185,57 @@
       ? "Plants can be picked up in New Jersey; ask about shipping to your state and we'll confirm."
       : "Plants are on a waitlist while our New Jersey nursery certificate is pending; we'll confirm pickup or shipping when they're ready.";
     el.textContent = crews + " " + plants + " We can't send cleanup crews to Hawaii, Alaska or U.S. territories.";
+
+    var ship = $("#faq-ship-crews");
+    if (ship) {
+      ship.textContent = flags.usdaPPQ526Permit
+        ? "Yes, to the lower 48 states. We ship only species named on our USDA permit."
+        : "Not yet. Cleanup crews are New Jersey pickup only until our USDA permit is issued.";
+    }
+    var shopsNote = $("#shops-note");
+    if (shopsNote) shopsNote.hidden = flags.usdaPPQ526Permit;
   }
+
+  /* ---------- Buttons and links that depend on settings ---------- */
+  function applySettings() {
+    // "What we make": plant button follows the nursery flag.
+    $$("[data-plant-cta] [data-cta-label]").forEach(function (span) {
+      span.textContent = flags.njNurseryCertified ? "Shop now" : "Join the waitlist";
+    });
+    // Survey button only when a survey link is set.
+    var surveyUrl = typeof SURVEY_URL !== "undefined" ? String(SURVEY_URL).trim() : "";
+    var surveyRow = $("#survey-row");
+    if (surveyRow) {
+      surveyRow.hidden = !surveyUrl;
+      if (surveyUrl) $("#survey-link").href = surveyUrl;
+    }
+    // Link previews: full addresses from SITE_URL.
+    var siteUrl = typeof SITE_URL !== "undefined" ? String(SITE_URL).trim() : "";
+    if (siteUrl) {
+      try {
+        var og = $('meta[property="og:url"]');
+        if (!og) {
+          og = document.createElement("meta");
+          og.setAttribute("property", "og:url");
+          document.head.appendChild(og);
+        }
+        og.setAttribute("content", siteUrl);
+        $$('meta[property="og:image"], meta[name="twitter:image"]').forEach(function (m) {
+          m.setAttribute("content", new URL(m.getAttribute("content"), siteUrl).href);
+        });
+      } catch (e) { /* not a valid address yet */ }
+    }
+  }
+
+  // A link to an FAQ item opens it.
+  function openDetails(id) {
+    var d = id && document.getElementById(id);
+    if (d && d.tagName === "DETAILS") d.open = true;
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (a) openDetails(a.getAttribute("href").slice(1));
+  });
 
   /* ======================================================================
      Inquiry flow
@@ -225,7 +283,7 @@
   };
 
   function fillProductSelect() {
-    var groups = { plants: "Lab-grown plants", crews: "Living cleanup crews" };
+    var groups = { plants: "Lab-grown plants", crews: "Living cleanup crews", next: "Testing next (not for sale yet)" };
     Object.keys(groups).forEach(function (line) {
       var og = document.createElement("optgroup");
       og.label = groups[line];
@@ -247,6 +305,12 @@
     var p = productById(state.productId);
     var name = state.name.trim() || "[your name]";
     if (!p) return "Hi Agar & Oak, I have a question: \n\n";
+    if (isNext(p)) {
+      return "Hi Agar & Oak,\n\n" +
+        "I'd be interested in " + p.name.charAt(0).toLowerCase() + p.name.slice(1) +
+        ". I'd buy about [how many] every [how often], and I'd expect to pay about [price].\n\n" +
+        "Thanks,\n" + (state.name.trim() || "[your name and shop]");
+    }
     if (isBusiness(p)) {
       return "Hi Agar & Oak,\n\n" +
         "I'm writing from " + (state.businessName.trim() || "[your shop]") +
@@ -257,6 +321,13 @@
         "Thanks,\n" + name;
     }
     var how = state.delivery === "shipping" ? "shipping" : "local pickup";
+    if (isWaitlist(p)) {
+      return "Hi Agar & Oak,\n\n" +
+        "I'd like to join the waitlist for the " + p.name + ". Quantity: " + state.qty + ".\n" +
+        "I'd prefer " + how + ".\n" +
+        "Could you let me know when it's available?\n\n" +
+        "Thanks,\n" + name;
+    }
     return "Hi Agar & Oak,\n\n" +
       "I'm interested in the " + p.name + " (" + money(priceFor(p, state.delivery)) + " " + p.priceUnit + "). Quantity: " + state.qty + ".\n" +
       "I'd prefer " + how + ".\n" +
@@ -266,7 +337,8 @@
 
   function updateSendLinks() {
     var p = productById(state.productId);
-    var subject = state.subject || "Inquiry: " + (p ? p.name : "General question");
+    var subject = state.subject ||
+      (isNext(p) ? "Interest: " : isWaitlist(p) ? "Waitlist: " : "Inquiry: ") + (p ? p.name : "General question");
     var body = els.message.value;
     if (hasConfig) {
       els.email.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
@@ -298,8 +370,8 @@
     if (!shipOk) state.delivery = "pickup";
     $$('input[name="delivery"]').forEach(function (r) { r.checked = r.value === state.delivery; });
 
-    // Product-only fields are hidden for a general question
-    els.orderFields.hidden = !p;
+    // Quantity and delivery only apply to products we sell now.
+    els.orderFields.hidden = !p || isNext(p);
     els.product.value = state.productId;
 
     // Wholesale
@@ -309,8 +381,9 @@
 
     // Summary chip
     if (p) {
-      els.chipText.textContent = p.name + " · " + money(priceFor(p, state.delivery));
-      els.chipChange.href = p.line === "crews" ? "#crew-products" : "#plant-products";
+      els.chipText.textContent = p.name + " · " +
+        (isNext(p) ? "testing" : isWaitlist(p) ? "waitlist" : money(priceFor(p, state.delivery)));
+      els.chipChange.href = isNext(p) ? "#next-products" : isCrew(p) ? "#crew-products" : "#plant-products";
       els.chip.hidden = false;
     } else {
       els.chip.hidden = true;
@@ -348,8 +421,9 @@
   }
 
   // Prefill the form with a ready-made message (used by the setup planner and the chat).
-  function inquireWith(subject, message) {
+  function inquireWith(subject, message, opts) {
     state.productId = "";
+    if (opts && opts.business) state.business = true;
     render({ force: true });
     state.subject = subject;
     state.edited = true;
@@ -360,6 +434,15 @@
     goToContact();
   }
   window.AgarOak = { inquireWith: inquireWith };
+
+  var sampleBtn = $("#request-sample");
+  if (sampleBtn) {
+    sampleBtn.addEventListener("click", function () {
+      inquireWith("Free sample request",
+        "Hi Agar & Oak,\n\nI'm writing from [shop] in [town, state]. We'd like a free sample of [product] to try.\n\nThanks,\n[your name]",
+        { business: true });
+    });
+  }
 
   /* ---------- Events ---------- */
   document.addEventListener("click", function (e) {
@@ -485,6 +568,7 @@
   renderStats();
   renderProducts();
   renderShippingFaq();
+  applySettings();
   fillProductSelect();
 
   var params = new URLSearchParams(window.location.search);
@@ -498,6 +582,7 @@
   // Content above #contact was just rendered, so re-apply any #hash jump.
   if (window.location.hash) {
     var target = document.getElementById(window.location.hash.slice(1));
+    openDetails(target && target.id);
     if (target) {
       target.scrollIntoView({ block: "start" });
       if (target.id === "contact" && fromUrl) els.heading.focus({ preventScroll: true });

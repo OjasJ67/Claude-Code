@@ -248,6 +248,12 @@ html:not(.js) .nav-toggle { display: none; }
 .goal { margin: 0 0 1.25rem; padding: 0; }
 .goal p { font: 500 clamp(1.3rem, 3.6vw, 1.75rem)/1.4 var(--serif); color: var(--ink); margin: 0; }
 .goal-sub { font-size: 1rem; }
+.founder {
+  margin-top: 1.5rem; padding: 18px 20px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.founder p { margin: 0; }
+.founder .founder-sign { margin-top: 10px; font-size: 0.9rem; font-weight: 600; color: var(--ink-soft); }
 .todo {
   border: 1.5px dashed var(--field); border-radius: var(--radius);
   padding: 14px 16px; color: var(--ink); background: var(--bg);
@@ -362,6 +368,10 @@ text.d-accent, .d-label text.d-accent, .d-num text.d-accent { fill: var(--ink); 
 .badge-muted { background: var(--bg); color: var(--ink); box-shadow: inset 0 0 0 1px var(--field); }
 .product-note { font-size: 0.8rem; color: var(--ink-soft); margin: 0; }
 .product .btn { width: 100%; }
+
+/* ---------- What we're testing next ---------- */
+.survey-row { margin: 2rem 0 0; }
+.survey-row[hidden] { display: none; }
 
 /* ---------- Setup planner ---------- */
 .planner { display: grid; gap: 20px; align-items: start; }

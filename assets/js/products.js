@@ -1,16 +1,20 @@
 /* Products. The site renders every card from this list.
-   line:          "plants" | "crews"
+   line:          "plants" | "crews" | "next" (what we're testing; no price, not for sale)
    purpose:       one sentence: what it's for
-   price:         plants: the price. crews: the SHIPPED price
+   price:         plants: the price (hidden while FLAGS.njNurseryCertified is false).
+                  crews: the SHIPPED price
    pickupPrice:   crews only: NJ local pickup price
    priceUnit:     shown after the price ("per jar", "each" ...)
-   status:        "available" | "coming-later"
+   status:        "available" | "coming-later" | "testing"
    wholesaleOnly: true = business inquiries only, quantity starts at minQty
    image:         swap the black "?" placeholder for your own photo (4:3 works best)
 
-   Copy rules: no fertilizer/soil-amendment wording, no health claims,
-   no guarantees, species names only (no trademarked cultivar names).
-   Cleanup crews: only species USDA allows without a containment facility. */
+   Copy rules: no fertilizer/soil-amendment wording, no health or medicinal
+   claims, no guarantees, no pest-free claims (say "grown in sterile culture",
+   "no pesticides used" or "mite-checked"), species names only (no trademarked
+   cultivar names).
+   Cleanup crews: never Cubaris, Nesodillo or Merulanella (they need a USDA
+   containment facility); once the permit arrives, ship only species named on it. */
 const PRODUCTS = [
   // ---- Lab-grown plants ----
   {
@@ -39,7 +43,7 @@ const PRODUCTS = [
   },
   {
     id: "terrarium-cup", line: "plants", name: "Terrarium plant cup",
-    purpose: "Pest-free Fittonia, Peperomia and other vivarium plants.",
+    purpose: "Fittonia, Peperomia and other vivarium plants, grown in sterile culture.",
     price: 15, priceUnit: "per cup", status: "available", wholesaleOnly: false, minQty: 1,
     image: "assets/img/placeholders/image-placeholder.svg"
   },
@@ -64,6 +68,8 @@ const PRODUCTS = [
     image: "assets/img/placeholders/image-placeholder.svg"
   },
   {
+    // Before shipping these out of state, check that Armadillidium klugii and
+    // A. maculatum are both named on your USDA PPQ 526 permit.
     id: "premium-isopods-10", line: "crews", name: "Premium morph isopods (10)",
     purpose: "Colorful breeding stock: Magic Potion (<i>Armadillidium vulgare</i>), Zebra (<i>A. maculatum</i>), clown morphs (<i>A. klugii</i>).",
     price: 45, pickupPrice: 40, priceUnit: "per 10", status: "available", wholesaleOnly: false, minQty: 1,
@@ -85,6 +91,26 @@ const PRODUCTS = [
     id: "feeder-pack-50", line: "crews", name: "Isopod feeder pack (50)",
     purpose: "Live food for small frogs and geckos.",
     price: 25, pickupPrice: 20, priceUnit: "per pack", status: "available", wholesaleOnly: false, minQty: 1,
+    image: "assets/img/placeholders/image-placeholder.svg"
+  },
+
+  // ---- What we're testing next (not for sale; "I'd use this" collects interest) ----
+  {
+    id: "fruit-fly-cultures", line: "next", name: "Fruit fly cultures",
+    purpose: "Flightless fruit flies for dart frogs, mantises and jumping spiders.",
+    status: "testing", wholesaleOnly: false, minQty: 1,
+    image: "assets/img/placeholders/image-placeholder.svg"
+  },
+  {
+    id: "mushroom-cultures", line: "next", name: "Mushroom cultures",
+    purpose: "Liquid cultures and grain spawn for gourmet mushrooms such as oyster, lion's mane and shiitake.",
+    status: "testing", wholesaleOnly: false, minQty: 1,
+    image: "assets/img/placeholders/image-placeholder.svg"
+  },
+  {
+    id: "copepods-phytoplankton", line: "next", name: "Copepods and phytoplankton",
+    purpose: "Live copepods and phytoplankton for reef tanks, available once our New Jersey aquatic farmer license is issued.",
+    status: "testing", wholesaleOnly: false, minQty: 1,
     image: "assets/img/placeholders/image-placeholder.svg"
   }
 ];

@@ -4,7 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agar &amp; Oak · Lab-grown plants. Living cleanup crews.</title>
-  <meta name="description" content="Pest-free carnivorous and terrarium plants cloned in our New Jersey lab, and captive-bred springtails and isopods for bioactive terrariums.">
+  <meta name="description" content="Carnivorous and terrarium plants grown in sterile culture in our New Jersey lab, plus mite-checked springtails and isopods for bioactive terrariums.">
+  <!-- Link previews. main.js adds og:url and full image links from SITE_URL in config.js.
+       Link-preview crawlers don't run JavaScript, so once you have your address also
+       uncomment og:url below and use full https:// links for the two image tags. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Agar &amp; Oak">
+  <meta property="og:title" content="Agar &amp; Oak · Lab-grown plants. Living cleanup crews.">
+  <meta property="og:description" content="Carnivorous and terrarium plants grown in sterile culture in our New Jersey lab, plus mite-checked springtails and isopods for bioactive terrariums.">
+  <!-- <meta property="og:url" content="https://your-site-address/"> -->
+  <meta property="og:image" content="assets/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Agar &amp; Oak: lab-grown plants and living cleanup crews">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Agar &amp; Oak · Lab-grown plants. Living cleanup crews.">
+  <meta name="twitter:description" content="Carnivorous and terrarium plants grown in sterile culture in our New Jersey lab, plus mite-checked springtails and isopods for bioactive terrariums.">
+  <meta name="twitter:image" content="assets/img/og-image.png">
   <meta name="theme-color" content="#FFFFFF">
   <script>document.documentElement.classList.add("js")</script>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
@@ -30,9 +46,11 @@
       </button>
       <nav id="site-nav" class="site-nav" aria-label="Main">
         <ul>
-          <li><a href="#plants">Carnivorous Plant Jars</a></li>
-          <li><a href="#crews">Cleanup Crews</a></li>
-          <li><a href="#biology">The Biology Behind the Scenes</a></li>
+          <li><a href="#plants">Plants</a></li>
+          <li><a href="#crews">Cleanup crews</a></li>
+          <li><a href="#next">Testing next</a></li>
+          <li><a href="#biology">The biology</a></li>
+          <li><a href="#shops">For shops</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -56,7 +74,7 @@
       <div class="wrap hero-inner">
         <div class="hero-copy">
           <h1 id="hero-title">Lab-grown plants and living cleanup crews for healthy terrariums.</h1>
-          <p class="lede">Pest-free plants cloned in our New Jersey lab, and captive-bred springtails and isopods that keep enclosures clean.</p>
+          <p class="lede">Plants grown in sterile culture in our New Jersey lab, and captive-bred, mite-checked springtails and isopods that keep enclosures clean.</p>
           <div class="btn-row">
             <a class="btn" href="#plants">See the plants</a>
             <a class="btn btn-outline" href="#crews">See the cleanup crews</a>
@@ -76,10 +94,14 @@
       <div class="wrap narrow">
         <h2 id="about-title">Why we exist</h2>
         <blockquote class="goal">
-          <p>Agar &amp; Oak exists to make living ecosystems easy to start. We grow pest-free plants in the lab and breed cleanup crews in-house, so hobbyists and shops never need to take plants or animals from the wild.</p>
+          <p>Agar &amp; Oak exists to make living ecosystems easy to start. We grow plants in sterile culture in the lab and breed mite-checked cleanup crews in-house, so hobbyists and shops never need to take plants or animals from the wild.</p>
         </blockquote>
         <p class="goal-sub"><strong>First-year goal:</strong> Become New Jersey's go-to local source for lab-grown carnivorous plants and bioactive cleanup crews.</p>
-        <p class="founder todo">TODO: 2–3 sentences about you and why you started this.</p>
+        <!-- Founder note: a draft written from the business plan. Edit it to sound like you. -->
+        <div class="founder">
+          <p>I started Agar &amp; Oak in a spare room in North Brunswick, with a pressure canner, a homemade still air box and a shelf of mason jars. I wanted to make it easy to start a living terrarium without taking a single plant or animal from the wild. Every plant and cleanup crew we sell is grown or bred right here.</p>
+          <p class="founder-sign">Founder, Agar &amp; Oak</p>
+        </div>
       </div>
     </section>
 
@@ -93,9 +115,9 @@
             <img class="img-slot" src="assets/img/placeholders/image-placeholder.svg" width="400" height="300" alt="Photo coming soon: lab-grown plants">
             <div class="intro-body">
               <h3>Lab-grown plants</h3>
-              <p>We clone carnivorous and terrarium plants from tiny tissue samples on sterile gel. You get healthy, pest-free plants that were never taken from the wild.</p>
+              <p>We clone carnivorous and terrarium plants from tiny tissue samples on sterile gel. You get healthy plants, grown in sterile culture and never taken from the wild.</p>
               <div class="btn-row">
-                <a class="btn" href="#plant-products">Shop now<span class="sr-only">: lab-grown plants</span></a>
+                <a class="btn" href="#plant-products" data-plant-cta><span data-cta-label>Join the waitlist</span><span class="sr-only">: lab-grown plants</span></a>
                 <a class="btn btn-outline" href="#plants">Learn more<span class="sr-only"> about lab-grown plants</span></a>
               </div>
             </div>
@@ -121,7 +143,7 @@
       <div class="wrap">
         <p class="eyebrow">What makes us different</p>
         <h2 id="different-title">Clean bioactive, from one source</h2>
-        <p class="section-intro">Few sellers can offer a pest-free bioactive setup from one source. We grow sterile lab plants and mite-checked cleanup crews side by side, and print our standards on every label.</p>
+        <p class="section-intro">We grow sterile lab plants and mite-checked cleanup crews side by side. We print our standards on every label.</p>
         <ul class="equation" aria-label="Clean bioactive">
           <li><span class="pill">Sterile lab-grown plants</span></li>
           <li><span class="op" aria-hidden="true">+</span><span class="pill">Mite-checked cleanup crews</span></li>
@@ -216,7 +238,7 @@
         <ul class="points">
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10c-4-1.5-7-5.5-7-10V6z M9 12l2 2l4-4"/></svg>
-            <span><strong>Pest-free.</strong> Grown in sterile culture, so no hitchhiking pests.</span>
+            <span><strong>Grown in sterile culture.</strong> Every plantlet starts in a sealed, sterile jar.</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h10v13H4z M10 4h10v13"/></svg>
@@ -279,13 +301,26 @@
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21c-5-3-8-7-8-11a4 4 0 0 1 8-1a4 4 0 0 1 8 1c0 4-3 8-8 11z"/></svg>
-            <span><strong>Safe with plants and pets.</strong> They eat decay, not living plants.</span>
+            <span><strong>Plant-friendly.</strong> They prefer decaying leaves over living plants.<sup><a href="#ref-7" aria-label="Reference 7">7</a></sup></span>
           </li>
         </ul>
 
         <div class="stat-grid stat-grid-single" data-stats="crews"></div>
 
         <ul class="product-grid" id="crew-products" data-line="crews" aria-label="Cleanup crews for sale"></ul>
+      </div>
+    </section>
+
+    <!-- ============ What we're testing next ============ -->
+    <section class="section section-rule" id="next" aria-labelledby="next-title">
+      <div class="wrap">
+        <p class="eyebrow">Not for sale yet</p>
+        <h2 id="next-title">What we're testing next</h2>
+        <p class="section-intro">We're testing three new cultures in the lab. Tell us if you'd use one; it helps us decide what to make next.</p>
+        <ul class="product-grid" id="next-products" data-line="next" aria-label="Products we're testing"></ul>
+        <p class="survey-row" id="survey-row" hidden>
+          <a class="btn btn-outline" id="survey-link" href="#" target="_blank" rel="noopener">Take the 1-minute survey<span class="sr-only"> (opens in a new tab)</span></a>
+        </p>
       </div>
     </section>
 
@@ -382,7 +417,7 @@
             <p>Carnivorous plants evolved in poor soils and multiply best on diluted medium: Venus flytraps at one-third strength<sup><a href="#ref-4" aria-label="Reference 4">4</a></sup> and <i>Drosera intermedia</i> at one-quarter strength.<sup><a href="#ref-5" aria-label="Reference 5">5</a></sup></p>
             <aside class="so-what" aria-label="So what? Plants">
               <p class="so-what-title">So what?</p>
-              <p>Because every plantlet grows in a sterile jar from a clean parent, the plants arrive pest-free and identical, and one parent can supply hundreds of buyers with no wild collection.</p>
+              <p>Because every plantlet grows in a sterile jar from a clean parent, the plants are identical, no pesticides are used, and one parent can supply hundreds of buyers with no wild collection.</p>
             </aside>
           </article>
 
@@ -401,6 +436,33 @@
       </div>
     </section>
 
+    <!-- ============ For shops ============ -->
+    <section class="section band-soft" id="shops" aria-labelledby="shops-title">
+      <div class="wrap">
+        <p class="eyebrow">Wholesale</p>
+        <h2 id="shops-title">For shops</h2>
+        <p class="section-intro">We supply plant shops, garden centers and reptile stores with lab-grown plants and cleanup crews. Try a free sample first, and we'll quote wholesale prices for your shop.</p>
+        <ul class="points">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 11h16v9H4z M3 7h18v4H3z M12 7v13 M12 7c-1.5-4-6-4-5 0 M12 7c1.5-4 6-4 5 0"/></svg>
+            <span><strong>Free samples for shops</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12l9-9h8v8l-9 9z M15.5 8.5h.01"/></svg>
+            <span><strong>Wholesale pricing on request</strong></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 6h12v10H2z M14 9h4l3 3v4h-7 M6 19a2 2 0 1 0 .01 0 M17 19a2 2 0 1 0 .01 0"/></svg>
+            <span><strong>Local delivery in New Jersey</strong></span>
+          </li>
+        </ul>
+        <div class="btn-row">
+          <button type="button" class="btn" id="request-sample">Request a free sample</button>
+        </div>
+        <p class="fine" id="shops-note">Live isopods and springtails can't go out of state until our USDA permit is issued.</p>
+      </div>
+    </section>
+
     <!-- ============ FAQ ============ -->
     <section class="section section-rule" id="faq" aria-labelledby="faq-title">
       <div class="wrap narrow">
@@ -415,12 +477,16 @@
             <p id="faq-shipping">Cleanup crews are New Jersey local pickup only for now. Plants: ask us and we'll confirm pickup or shipping. We can't send cleanup crews to Hawaii, Alaska or U.S. territories.</p>
           </details>
           <details>
-            <summary>Are your isopods legal to keep?</summary>
-            <p>We only breed species that USDA allows to be kept and moved without a containment facility.</p>
+            <summary>Can you ship cleanup crews?</summary>
+            <p id="faq-ship-crews">Not yet. Cleanup crews are New Jersey pickup only until our USDA permit is issued.</p>
           </details>
           <details>
             <summary>How long do tissue-culture plants last in the jar?</summary>
             <p>About 2–4 months; plant them out or <a href="#contact">ask us how</a>.</p>
+          </details>
+          <details id="faq-guarantees">
+            <summary>What do your guarantees cover?</summary>
+            <p>Rooted starter plants: if a plant dies within 30 days of pickup or delivery and you followed the care card, send us a photo and we'll replace or refund it. Cleanup-crew starter cultures: if a culture crashes within 30 days, send a photo and we'll replace it. Tissue-culture jars and wholesale orders aren't covered. Email or text us to make a claim.</p>
           </details>
         </div>
         <div class="ask-callout">
@@ -565,9 +631,10 @@
   <footer class="site-footer">
     <div class="wrap footer-inner">
       <img class="footer-logo" src="assets/img/logo.svg" alt="" width="44" height="44">
-      <p>Agar &amp; Oak · New Jersey</p>
+      <p>Agar &amp; Oak LLC · North Brunswick, New Jersey</p>
+      <p><a data-contact="email" href="mailto:AgarOakContact@gmail.com">AgarOakContact@gmail.com</a> · <a data-contact="phone" href="tel:+17328237221">+1 732-823-7221</a></p>
       <p><a href="privacy.html">Privacy</a></p>
-      <p>© <span data-year>2026</span> Agar &amp; Oak</p>
+      <p>© <span data-year>2026</span> Agar &amp; Oak LLC</p>
       <p class="fine">No payments are processed on this website.</p>
     </div>
   </footer>

@@ -27,10 +27,10 @@
 
   var SUGGESTIONS = [
     "How do I buy?",
-    "Do you ship?",
     "Which cleanup crew do I need?",
     "What is tissue culture?",
-    "Are your isopods legal?"
+    "Can you ship cleanup crews?",
+    "What do your guarantees cover?"
   ];
   var MAX_TURNS = 10;
 
@@ -39,7 +39,8 @@
     flags: typeof FLAGS !== "undefined" ? FLAGS : { njNurseryCertified: false, usdaPPQ526Permit: false },
     email: typeof EMAIL !== "undefined" ? EMAIL : "",
     phoneDisplay: typeof PHONE_DISPLAY !== "undefined" ? PHONE_DISPLAY : (typeof PHONE !== "undefined" ? PHONE : ""),
-    differences: typeof DIFFERENCES !== "undefined" ? DIFFERENCES : null
+    differences: typeof DIFFERENCES !== "undefined" ? DIFFERENCES : null,
+    survivalRate: typeof SURVIVAL_RATE !== "undefined" ? SURVIVAL_RATE : ""
   };
 
   var turns = [];          // the conversation sent to the AI: [{role, content}]

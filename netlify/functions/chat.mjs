@@ -11,7 +11,7 @@ import assistantFile from "../../assets/js/assistant.js";
 import differencesFile from "../../assets/js/differences.js";
 import promptFile from "../../assets/js/assistant-prompt.js";
 
-const { EMAIL, PHONE_DISPLAY, FLAGS } = configFile;
+const { EMAIL, PHONE_DISPLAY, FLAGS, SURVIVAL_RATE } = configFile;
 const { PRODUCTS } = productsFile;
 const { ASSISTANT } = assistantFile;
 const { DIFFERENCES } = differencesFile;
@@ -27,7 +27,8 @@ const SYSTEM_PROMPT = ASSISTANT_PROMPT.build(ASSISTANT, {
   flags: FLAGS,
   email: EMAIL,
   phoneDisplay: PHONE_DISPLAY,
-  differences: DIFFERENCES
+  differences: DIFFERENCES,
+  survivalRate: SURVIVAL_RATE
 });
 
 let client; // created on first use; reads ANTHROPIC_API_KEY

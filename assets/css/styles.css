@@ -249,7 +249,7 @@ html:not(.js) .nav-toggle { display: none; }
 .about-img { width: 100%; max-width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }
 @media (min-width: 820px) { .about-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; } }
 .goal { margin: 0 0 1.25rem; padding: 0; }
-.goal p { font: 500 clamp(1.3rem, 3.6vw, 1.75rem)/1.4 var(--serif); color: var(--ink); margin: 0; }
+.goal p { font: 400 1.125rem/1.7 var(--sans); color: var(--ink-soft); margin: 0; max-width: 52ch; }
 .todo {
   border: 1.5px dashed var(--field); border-radius: var(--radius);
   padding: 14px 16px; color: var(--ink); background: var(--bg);

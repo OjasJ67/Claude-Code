@@ -505,7 +505,7 @@
     <section class="section band" id="contact" aria-labelledby="contact-title">
       <div class="wrap narrow">
         <h2 id="contact-title" tabindex="-1">Inquire</h2>
-        <p class="section-intro">Pick a product and we'll write the message for you. Send it from your own email or text app.</p>
+        <p class="section-intro">Pick a product and we'll write the message for you. Email it to us right from this page, or send it as a text.</p>
         <p class="hint contact-assist">Just have a quick question? <button type="button" class="link-btn" data-open-chat>Ask the assistant</button> for an instant answer.</p>
 
         <p class="chip" id="inquiry-chip" hidden>
@@ -532,7 +532,12 @@
           <figcaption>No cart and no payment: just a message to us.</figcaption>
         </figure>
 
-        <form class="inquiry card" id="inquiry-form" novalidate>
+        <!-- Netlify Forms: "Email Inquiry" posts this form to Netlify, which emails it to us (setup in README). -->
+        <form class="inquiry card" id="inquiry-form" name="inquiry" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="inquiry">
+          <input type="hidden" name="subject" id="inquiry-subject" value="">
+          <p class="hp" hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
           <div class="field">
             <label for="inquiry-product">Product</label>
             <select id="inquiry-product" name="product">
@@ -586,33 +591,37 @@
           </div>
 
           <div class="field">
+            <label for="inquiry-email">Your email</label>
+            <input id="inquiry-email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="email-hint">
+            <p class="hint" id="email-hint">For Email Inquiry, so we can reply. Not needed to text or call.</p>
+            <p class="field-error" id="email-error" hidden></p>
+          </div>
+
+          <div class="field">
             <div class="label-row">
               <label for="inquiry-message">Your message</label>
               <button type="button" class="link-btn" id="regenerate" hidden>Regenerate message</button>
             </div>
-            <textarea id="inquiry-message" name="message" rows="9"></textarea>
-            <p class="hint">Edit anything you like before sending.</p>
+            <textarea id="inquiry-message" name="message" rows="9" aria-describedby="message-hint"></textarea>
+            <p class="hint" id="message-hint">Edit anything you like before sending.</p>
+            <p class="field-error" id="message-error" hidden></p>
           </div>
 
           <div class="send-grid">
-            <a class="btn btn-send" id="send-email" href="mailto:AgarAndOak@gmail.com">
+            <button type="submit" class="btn btn-send" id="send-email">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18v12H3z M3 7l9 6l9-6"/></svg>
-              Email
-            </a>
+              <span id="send-email-label">Email Inquiry</span>
+            </button>
             <a class="btn btn-send" id="send-sms" href="sms:+17328237221">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16v11H9l-5 4z"/></svg>
-              Text
+              Text Inquiry
             </a>
             <a class="btn btn-send btn-outline" id="send-call" href="tel:+17328237221">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h4l1.5 5l-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5l5 1.5v4a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg>
               Call
             </a>
-            <button type="button" class="btn btn-send btn-outline" id="copy-message">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 8h12v12H8z M4 16V4h12"/></svg>
-              Copy message
-            </button>
           </div>
-          <p class="status" id="copy-status" role="status" aria-live="polite"></p>
+          <div class="send-status" id="send-status" role="status" aria-live="polite"></div>
           <p class="fine">No payment is taken on this site. We'll reply personally to confirm availability, price and pickup or shipping.</p>
         </form>
 
@@ -686,6 +695,5 @@
   <script src="assets/js/differences.js"></script>
   <script src="assets/js/main.js"></script>
   <script src="assets/js/different.js"></script>
-  <script src="assets/js/planner.js"></script>
 </body>
 </html>

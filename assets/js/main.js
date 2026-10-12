@@ -256,16 +256,20 @@
     town: $("#inquiry-town"),
     month: $("#inquiry-month"),
     name: $("#inquiry-name"),
+    email: $("#inquiry-email"),
+    emailError: $("#email-error"),
     message: $("#inquiry-message"),
+    messageError: $("#message-error"),
+    subject: $("#inquiry-subject"),
     regenerate: $("#regenerate"),
     chip: $("#inquiry-chip"),
     chipText: $("#chip-text"),
     chipChange: $("#chip-change"),
-    email: $("#send-email"),
+    send: $("#send-email"),
+    sendLabel: $("#send-email-label"),
     sms: $("#send-sms"),
     call: $("#send-call"),
-    copy: $("#copy-message"),
-    status: $("#copy-status"),
+    status: $("#send-status"),
     heading: $("#contact-title")
   };
 
@@ -335,14 +339,20 @@
       "Thanks,\n" + name;
   }
 
-  function updateSendLinks() {
+  function currentSubject() {
     var p = productById(state.productId);
-    var subject = state.subject ||
+    return state.subject ||
       (isNext(p) ? "Interest: " : isWaitlist(p) ? "Waitlist: " : "Inquiry: ") + (p ? p.name : "General question");
-    var body = els.message.value;
+  }
+
+  function mailtoHref() {
+    return "mailto:" + EMAIL + "?subject=" + encodeURIComponent(currentSubject()) + "&body=" + encodeURIComponent(els.message.value);
+  }
+
+  function updateSendLinks() {
+    els.subject.value = currentSubject();
     if (hasConfig) {
-      els.email.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      els.sms.href = "sms:" + PHONE + "?&body=" + encodeURIComponent(body);
+      els.sms.href = "sms:" + PHONE + "?&body=" + encodeURIComponent(els.message.value);
       els.call.href = "tel:" + PHONE;
     }
   }
@@ -390,7 +400,11 @@
     }
 
     // Message
-    if (opts.force) state.edited = false;
+    if (opts.force) {
+      state.edited = false;
+      setError(els.message, els.messageError, "");
+      showStatus("", "");
+    }
     if (!state.edited) els.message.value = buildMessage();
     els.regenerate.hidden = !state.edited;
     updateSendLinks();
@@ -489,6 +503,7 @@
   });
 
   els.message.addEventListener("input", function () {
+    if (!els.messageError.hidden) setError(els.message, els.messageError, "");
     state.edited = els.message.value !== buildMessage();
     els.regenerate.hidden = !state.edited;
     updateSendLinks();
@@ -500,29 +515,104 @@
     els.message.focus();
   });
 
-  // Copy message, with a fallback for older browsers and file:// pages.
-  els.copy.addEventListener("click", function () {
-    var text = els.message.value;
-    var done = function () {
-      els.status.textContent = "Copied";
-      window.clearTimeout(done.t);
-      done.t = window.setTimeout(function () { els.status.textContent = ""; }, 4000);
-    };
-    var fallback = function () {
-      els.message.focus();
-      els.message.select();
-      var ok = false;
-      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
-      if (ok) done(); else els.status.textContent = "Select the message and copy it by hand.";
-    };
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(done, fallback);
-    } else {
-      fallback();
+  /* ---------- Email Inquiry ----------
+     Sends the form to Netlify Forms, which emails it to us, so the visitor stays on the page.
+     A page can supply its own sender as window.AGAR_INQUIRY_SENDER (the preview does).
+     If sending fails, the visitor gets a link to send the same message from their email app. */
+  var fromSite = typeof EMAIL_FROM_SITE === "undefined" || EMAIL_FROM_SITE;
+  var sending = false;
+  var SEND_LABEL = els.sendLabel.textContent;
+
+  function setError(input, box, text) {
+    box.textContent = text || "";
+    box.hidden = !text;
+    var ids = (input.getAttribute("aria-describedby") || "").split(" ").filter(function (id) { return id && id !== box.id; });
+    if (text) { ids.push(box.id); input.setAttribute("aria-invalid", "true"); } else { input.removeAttribute("aria-invalid"); }
+    input.setAttribute("aria-describedby", ids.join(" "));
+  }
+
+  function showStatus(kind, text, withMailto) {
+    els.status.className = "send-status" + (kind ? " is-" + kind : "");
+    els.status.textContent = text;
+    if (withMailto && hasConfig) {
+      els.status.appendChild(document.createTextNode(" "));
+      var a = document.createElement("a");
+      a.href = mailtoHref();
+      a.textContent = "Send it from your email app instead";
+      els.status.appendChild(a);
+      els.status.appendChild(document.createTextNode(", or use Text Inquiry or Call."));
     }
+  }
+
+  // Put their name into a pre-written sign-off, then check nothing is left to fill in.
+  function checkMessage() {
+    var name = state.name.trim();
+    if (name) els.message.value = els.message.value.replace(/\[your name(?: and shop)?\]/g, name);
+    var text = els.message.value.trim();
+    if (!text || (!productById(state.productId) && text === buildMessage().trim())) return "Add your question to the message.";
+    if (/\[[^\]\n]+\]/.test(text)) return "Fill in or delete the parts in [square brackets] first.";
+    return "";
+  }
+
+  function netlifySend(data) {
+    var body = Object.keys(data).map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(data[k]); }).join("&");
+    return fetch(form.getAttribute("action") || "/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body
+    }).then(function (res) {
+      if (!res.ok) throw new Error("http_" + res.status);
+      return {};
+    });
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (sending) return;
+    if (!fromSite) { if (hasConfig) window.location.href = mailtoHref(); return; }
+
+    var email = els.email.value.trim();
+    var emailProblem = !email ? "Enter your email so we can reply." :
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? "Check your email address: it should look like name@example.com." : "";
+    var messageProblem = checkMessage();
+    setError(els.email, els.emailError, emailProblem);
+    setError(els.message, els.messageError, messageProblem);
+    if (emailProblem || messageProblem) {
+      showStatus("", "");
+      (emailProblem ? els.email : els.message).focus();
+      return;
+    }
+
+    var p = productById(state.productId);
+    var data = {
+      "form-name": form.getAttribute("name"),
+      "bot-field": form.querySelector('[name="bot-field"]').value,
+      subject: currentSubject(),
+      product: p ? p.name : "General question",
+      name: state.name.trim(),
+      email: email,
+      message: els.message.value
+    };
+    if (isBusiness(p)) { data.businessName = state.businessName.trim(); data.town = state.town.trim(); }
+
+    sending = true;
+    els.send.setAttribute("aria-disabled", "true");
+    els.sendLabel.textContent = "Sending…";
+    showStatus("", "Sending your inquiry…");
+    (window.AGAR_INQUIRY_SENDER || netlifySend)(data).then(function (result) {
+      state.subject = "";
+      render({ force: true }); // a fresh message, so a second tap doesn't send it twice
+      showStatus("ok", "Sent. Thanks! We'll reply to " + email + "." + (result && result.note ? " " + result.note : ""));
+    }, function () {
+      showStatus("error", "Sorry, we couldn't send that from the website.", true);
+    }).then(function () {
+      sending = false;
+      els.send.removeAttribute("aria-disabled");
+      els.sendLabel.textContent = SEND_LABEL;
+    });
   });
 
-  form.addEventListener("submit", function (e) { e.preventDefault(); });
+  els.email.addEventListener("input", function () { if (!els.emailError.hidden) setError(els.email, els.emailError, ""); });
 
   /* ---------- Chat assistant: loaded the first time someone opens it ---------- */
   var chatRoot = $("#chat");
@@ -560,6 +650,36 @@
         chatLoading = null; // let the next click try again
       });
     });
+  }
+
+  /* ---------- Setup planner: its code loads as the section comes near ---------- */
+  var plannerRoot = $("#planner");
+  var plannerLoading = null;
+  var plannerLoaded = false;
+  function loadPlanner() {
+    if (!plannerLoading) {
+      plannerLoading = loadScript("assets/js/planner.js").then(function () { plannerLoaded = true; },
+        function () { plannerLoading = null; });
+    }
+    return plannerLoading;
+  }
+  if (plannerRoot) {
+    // A tap on "Ask about this kit" that beats the download still goes through.
+    plannerRoot.addEventListener("click", function (e) {
+      var btn = e.target.closest("#planner-inquire");
+      if (!btn || plannerLoaded) return;
+      loadPlanner().then(function () { if (plannerLoaded) btn.click(); });
+    });
+    if ("IntersectionObserver" in window) {
+      var plannerWatch = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (en) { return en.isIntersecting; })) return;
+        plannerWatch.disconnect();
+        loadPlanner();
+      }, { rootMargin: "800px 0px" });
+      plannerWatch.observe(plannerRoot);
+    } else {
+      loadPlanner();
+    }
   }
 
   /* ---------- Survey pop-up: once per page load, after SURVEY_POPUP_SECONDS ---------- */

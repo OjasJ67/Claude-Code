@@ -20,6 +20,7 @@
   --paper: #F2EBDD;       /* sample-label paper */
   --paper-ink: #17181A;   /* sample-label print */
   --paper-soft: #5E5850;  /* sample-label secondary print */
+  --error: #F0A497;       /* form errors */
 
   --serif: "Fraunces", "Fraunces Fallback", Georgia, serif;
   --sans: "Inter", "Inter Fallback", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -193,7 +194,6 @@ a:hover { text-decoration-thickness: 2px; }
 .site-nav { flex-basis: 100%; order: 10; }
 @media (max-width: 400px) {
   .header-inner { gap: 8px; }
-  .brand-word { font-size: 1.15rem; }
   .nav-toggle { padding: 8px 12px; min-width: 44px; min-height: 44px; justify-content: center; }
   .nav-toggle-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .btn-small { padding: 8px 14px; min-height: 44px; }
@@ -254,11 +254,6 @@ html:not(.js) .nav-toggle { display: none; }
 @media (min-width: 820px) { .about-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; } }
 .goal { margin: 0 0 1.25rem; padding: 0; }
 .goal p { font: 400 1.125rem/1.7 var(--sans); color: var(--ink-soft); margin: 0; max-width: 52ch; }
-.todo {
-  border: 1.5px dashed var(--field); border-radius: var(--radius);
-  padding: 14px 16px; color: var(--ink); background: var(--bg);
-}
-
 /* ---------- Stats ---------- */
 .stat-grid {
   display: grid;
@@ -483,7 +478,7 @@ legend { padding: 0; margin-bottom: 6px; }
 .hint { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
 .hint[hidden] { display: none; }
 
-input[type="text"], input[type="number"], select, textarea {
+input[type="text"], input[type="email"], input[type="number"], select, textarea {
   width: 100%; min-height: 48px;
   font: 400 1rem/1.4 var(--sans); color: var(--ink);
   background: var(--bg);
@@ -493,6 +488,9 @@ input[type="text"], input[type="number"], select, textarea {
 textarea { min-height: 220px; resize: vertical; line-height: 1.5; }
 select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23F2EBDD' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 12px; padding-right: 38px; }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 1px; border-color: var(--ink); }
+input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: var(--error); }
+.field-error { margin: 6px 0 0; font-size: 0.9rem; font-weight: 600; color: var(--error); }
+.field-error[hidden] { display: none; }
 
 .stepper { display: inline-flex; align-items: stretch; }
 .stepper input { width: 76px; text-align: center; border-radius: 0; border-left: 0; border-right: 0; -moz-appearance: textfield; }
@@ -512,11 +510,22 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offs
 
 .label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 
-.send-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.send-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .btn-send { min-height: 56px; font-size: 1.05rem; border-radius: 14px; }
-@media (min-width: 720px) { .send-grid { grid-template-columns: repeat(4, 1fr); } }
+.btn-send[aria-disabled="true"] { opacity: 0.75; cursor: progress; }
+@media (min-width: 480px) {
+  .send-grid { grid-template-columns: 1fr 1fr; }
+  .send-grid #send-email { grid-column: 1 / -1; }
+}
+@media (min-width: 720px) {
+  .send-grid { grid-template-columns: repeat(3, 1fr); }
+  .send-grid #send-email { grid-column: auto; }
+}
 
-.status { min-height: 1.4em; margin: 0; font-weight: 600; color: var(--ink); }
+.send-status { min-height: 1.4em; margin: 0; font-weight: 500; color: var(--ink); }
+.send-status.is-ok, .send-status.is-error { padding: 12px 14px; border-radius: 10px; background: var(--tan-soft); border-left: 4px solid var(--accent); }
+.send-status.is-error { border-left-color: var(--error); }
+.send-status a { color: var(--ink); font-weight: 600; }
 .fine { font-size: 0.85rem; margin: 0; }
 
 .contact-direct { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 6px; }

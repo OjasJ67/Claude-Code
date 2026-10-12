@@ -12,7 +12,7 @@ Plain HTML, CSS and JavaScript. No build step, no cookies, no analytics, and no 
 
 | File | What it holds |
 | --- | --- |
-| `assets/js/config.js` | Email, phone, Instagram, the two legal flags, the survey link, site address, survival rate and the chat setting |
+| `assets/js/config.js` | Email, phone, Instagram, the Email Inquiry setting, the two legal flags, the survey link, site address, survival rate and the chat setting |
 | `assets/js/products.js` | Every product card: name, one-line purpose, prices, status, and the "What we're testing next" items |
 | `assets/js/stats.js` | The big statistics and where each one appears |
 | `assets/js/references.js` | The numbered reference list (stats and biology claims link here) |
@@ -43,8 +43,30 @@ update from these flags automatically.
 ### How "Buy now" works
 
 Each product button fills in a message for that product and jumps to the contact form at the bottom.
-The visitor sends it from their own email or text app. Links like `index.html?product=venus-flytrap-jar#contact`
-open the form with that product already chosen.
+Links like `index.html?product=venus-flytrap-jar#contact` open the form with that product already chosen.
+The visitor then picks one of three buttons:
+
+- **Email Inquiry** sends the message from the page, so they never leave the site (setup below). It asks for
+  their email so you can reply, and won't send while the message still has parts in [square brackets] to fill in.
+  If sending fails, they get a link to send the same message from their own email app instead.
+- **Text Inquiry** opens Messages (iMessage on iPhone and Mac, the texting app on Android) with the message
+  already written to +1 732-823-7221.
+- **Call** dials +1 732-823-7221.
+
+### Email Inquiry setup (Netlify, one time)
+
+Email Inquiry uses Netlify Forms, which is built into Netlify: no extra account, key or code.
+
+1. In Netlify, open the site → **Forms** → **Enable form detection**, then redeploy (or push to the branch) so Netlify finds the `inquiry` form.
+2. Add the email alert: **Site (or Project) configuration → Notifications → Emails and webhooks → Form submission notifications →
+   Add notification → Email notification**, choose the `inquiry` form and enter `AgarAndOak@gmail.com`.
+3. Send yourself a test inquiry from the live site. Every inquiry is also saved under **Forms** in Netlify.
+
+The email subject is the inquiry's subject line (for example "Waitlist: Venus flytrap TC jar"), and the visitor's email is in the message so you can reply.
+Netlify filters spam (there's also a hidden trap field for bots); check the form's spam list in Netlify now and then.
+Netlify's plans include a monthly allowance of form submissions; check its pricing page for your plan.
+Until form detection is on, or if the site is opened from your computer, sending fails and visitors get the "send it from your email app" link.
+To skip all this and always open the visitor's email app, set `EMAIL_FROM_SITE = false` in `config.js`.
 
 ## Chat assistant
 
@@ -67,6 +89,7 @@ The "Ask a question" button opens a chat that answers general questions.
 - [ ] Before shipping premium isopods out of state, check that *Armadillidium klugii* and *A. maculatum* are both named on your USDA permit.
 - [ ] `assets/js/config.js`: add `INSTAGRAM` if you have one.
 - [ ] Check the promises in `differences.js` before launch, especially the two guarantees (30 days on rooted starter plants; replacing a starter culture that crashes in its first month), the springtail subscription and display jars, and the QR care-video card.
+- [ ] Turn on Email Inquiry in Netlify (see "Email Inquiry setup" above) and send a test inquiry.
 - [ ] Optional: switch on AI chat answers (see "Chat assistant" above).
 - [ ] `privacy.html`: update the "Last updated" date whenever you change the page.
 

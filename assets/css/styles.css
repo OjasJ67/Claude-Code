@@ -217,8 +217,33 @@ html:not(.js) .nav-toggle { display: none; }
 }
 
 /* ---------- Hero ---------- */
-.hero { padding: 56px 0 var(--section); }
+.hero { position: relative; isolation: isolate; overflow: hidden; padding: 56px 0 var(--section); }
 .hero h1 { max-width: 18ch; }
+
+/* Hero photo: fades out of the black page and is only at full colour on the right.
+   Phones: a band under the text. Wider screens: behind the hero, solid black under the
+   text (which ends 600px into the content column) and fading in to its right. */
+.hero::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: 0; right: 0; bottom: 0; height: 260px;
+  background:
+    linear-gradient(to bottom, var(--bg) 0%, rgba(18, 19, 20, 0.6) 30%, rgba(18, 19, 20, 0) 62%, rgba(18, 19, 20, 0) 86%, var(--bg) 100%),
+    linear-gradient(to right, rgba(18, 19, 20, 0.85) 0%, rgba(18, 19, 20, 0) 55%),
+    url("../img/photos/hero-aloe-sm.webp") 100% 70% / auto 150% no-repeat;
+}
+@media (max-width: 819.98px) { .hero { padding-bottom: 260px; } }
+@media (min-width: 820px) {
+  .hero { --text-end: max(calc(50% + 82px), calc(var(--gutter) + 600px)); }
+  .hero-copy { max-width: 600px; }
+  .hero::before {
+    top: 0; height: auto;
+    background:
+      linear-gradient(to right, var(--bg) 0, var(--bg) calc(var(--text-end) - 160px), rgba(18, 19, 20, 0.82) var(--text-end),
+        rgba(18, 19, 20, 0.4) calc(var(--text-end) + 150px), rgba(18, 19, 20, 0) calc(var(--text-end) + 320px)),
+      linear-gradient(to bottom, var(--bg) 0%, rgba(18, 19, 20, 0) 18%, rgba(18, 19, 20, 0) 80%, var(--bg) 100%),
+      url("../img/photos/hero-aloe.webp") right center / cover no-repeat;
+  }
+}
 .lede { font-size: 1.15rem; max-width: 52ch; color: var(--ink-soft); }
 .trust { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
 .trust li {
